@@ -974,14 +974,15 @@ async function deletePartner(id){
 /* V3 - Inline spreadsheet editor (CERISH only). Real app saves via the existing authenticated API. */
 const sheetSpecs=[
  ['name','TÊN KÊNH','text',160],['handle','ID KÊNH','text',135],
+ ['email','EMAIL','email',150],['phone','SĐT','tel',118],
  ['platform','NỀN TẢNG','select',98,['TikTok','Shopee','Facebook','Instagram','Khác']],
  ['type','LOẠI','select',100,['KOC','KOL','Affiliate','Creator','MC Live','Agency']],
  ['activity_mode','HÌNH THỨC','select',104,['Live','Video','Cả hai']],
   ['live_groups','CHUYÊN LIVE','groups',170],['video_groups','CHUYÊN VIDEO','groups',170],
- ['phone','SĐT','tel',118],['followers','FOLLOWER','number',96],
+ ['followers','FOLLOWER','number',96],
  ['stage','GIAI ĐOẠN','select',138,['Tiềm năng','Đã liên hệ','Đang đàm phán','Đang hợp tác','Tạm dừng','Ngừng hợp tác']],
  ['commission','HOA HỒNG TRUNG BÌNH','number',170],['owner','INSIGHT','text',112],
- ['email','EMAIL','email',150],['notes','GHI CHÚ','text',165]
+ ['sample_size','SIZE MẪU','text',100],['notes','GHI CHÚ','text',165]
 ];
 const bookingInlineSpecs={
  contact_date:'date',owner:'text',content_type:'select',video_status:'select',live_status:'select',status:'select',deal_type:'select',booking_fee:'number',
