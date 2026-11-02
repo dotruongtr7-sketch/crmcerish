@@ -585,6 +585,8 @@ body{font-family:Arial,'Segoe UI',sans-serif;color:#1d1c1f;background:#f9f8f8;fo
     <nav>
       <button class="nav-item" data-page="customers"><span class="nav-icon">♙</span><span>Khách hàng</span></button>
       <button class="nav-item" data-page="reports"><span class="nav-icon">▥</span><span>Báo cáo hiệu quả</span></button>
+      <button class="nav-item" data-page="staff"><span class="nav-icon">♟</span><span>Hồ sơ nhân sự</span></button>
+      <button class="nav-item" data-page="dailyreport"><span class="nav-icon">▦</span><span>Báo cáo hàng ngày</span></button>
       <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span>Cài đặt</span></button>
     </nav>
     <div class="sidebar-bottom"><div class="workspace-card"><span class="workspace-dot"></span><strong>Dữ liệu riêng CERISH</strong><small>Độc lập với HERISH & ORISH</small></div><div class="profile"><div class="avatar">C</div><div class="profile-text"><strong id="profileName">Quản trị CERISH</strong><small id="profileRole">Quản trị viên</small></div><button title="Đăng xuất" class="logout" id="logoutBtn">↪</button></div></div>
@@ -626,6 +628,28 @@ window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-'
 .cellpop-foot{display:flex;justify-content:flex-end;gap:10px;padding:12px 16px;border-top:1px solid #f0e7df}
 .cellpop-cancel{border:1px solid #e0d3da;background:#fff;border-radius:9px;padding:8px 16px;cursor:pointer;font-weight:600;color:#5a4a52}
 .cellpop-save{border:none;background:#8A1538;color:#fff;border-radius:9px;padding:8px 18px;cursor:pointer;font-weight:600}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:10px}
+.staff-card{background:#fff;border:1px solid #efe6ec;border-radius:14px;padding:16px;box-shadow:0 6px 20px rgba(80,40,60,.05)}
+.staff-card.staff-top{border-color:#d9b65e;box-shadow:0 8px 26px rgba(176,128,40,.16)}
+.staff-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.staff-rank{font-size:20px;min-width:30px;text-align:center}
+.staff-avatar{width:42px;height:42px;border-radius:12px;background:#8A1538;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
+.staff-id strong{display:block;font-size:15px;color:#1A1A1C}
+.staff-id small{color:#8d7b88;font-size:11.5px}
+.staff-revenue{background:#faf4f7;border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.staff-revenue small{display:block;font-size:10px;letter-spacing:.3px;color:#9a7d8c;font-weight:700}
+.staff-revenue b{font-size:20px;color:#8A1538}
+.staff-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.staff-kpis>div{background:#f8f5f3;border-radius:8px;padding:8px 4px}
+.staff-kpis span{display:block;font-weight:700;font-size:15px;color:#1A1A1C}
+.staff-kpis small{font-size:9.5px;color:#8d7b88;line-height:1.2;display:block}
+.dr-date{border:1px solid #e0d3da;border-radius:9px;padding:8px 12px;font:600 13px 'Segoe UI',sans-serif;color:#1A1A1C}
+.dr-table{width:100%;border-collapse:collapse;font-size:13px}
+.dr-table th{text-align:left;padding:9px 10px;font-size:10.5px;letter-spacing:.3px;color:#8d7b88;border-bottom:1px solid #efe6ec}
+.dr-table td{padding:9px 10px;border-bottom:1px solid #f4eef1;color:#1A1A1C}
+.dr-table td.muted{color:#9a8a93;text-align:center}
+.dr-delta{font-size:11px;font-weight:700}
+.dr-delta.good{color:#2f9e68}.dr-delta.bad{color:#d4435c}
 .partner-sheet tbody td{height:41px}
 .partner-sheet thead th{padding:9px 7px!important;font-size:10.5px!important;letter-spacing:0}
 .partner-sheet .sheet-index{min-width:42px;width:42px;max-width:42px;padding:0 4px!important}
@@ -646,7 +670,7 @@ const shortDate = v => {if(!v)return '—'; const d=String(v).slice(0,10).split(
 const LABELS = {
  dashboard:'Tổng quan', partners:'Đối tác KOC/KOL', bookings:'Booking hợp tác', campaigns:'Chiến dịch booking', products:'Sản phẩm', samples:'Theo dõi hàng mẫu',
  videos:'Video & nội dung', lives:'Livestream', tasks:'Công việc', customers:'Khách hàng',
- reports:'Báo cáo hiệu quả', settings:'Cài đặt'
+ reports:'Báo cáo hiệu quả', staff:'Hồ sơ nhân sự', dailyreport:'Báo cáo hàng ngày', settings:'Cài đặt'
 };
 const SUBS = {
   partners:'Quản lý hồ sơ, giai đoạn hợp tác và hiệu quả của từng KOC/KOL.',
@@ -690,7 +714,7 @@ function toast(msg, bad=false){const x=$('#toast');x.textContent=msg;x.style.bac
 function showLogin(){$('#app').classList.add('hidden');$('#login').classList.remove('hidden')}
 async function start(){try{state.user=await api('/api/me');$('#login').classList.add('hidden');$('#app').classList.remove('hidden');$('#profileName').textContent=state.user.name;$('#profileRole').textContent=state.user.role==='admin'?'Quản trị viên':state.user.role==='manager'?'Quản lý':'Nhân viên';navigate('partners')}catch{showLogin()}}
 function setNavigation(p){$$('[data-page]').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===(p==='samples'?'products':p)));$('#sidebar').classList.remove('mobile-open')}
-async function navigate(page){if(page==='bookings')page='campaigns';if(!LABELS[page])return;state.page=page;state.search='';state.filter='';state.groupFilter='';state.videoGroupFilter='';state.productGroupFilter='';state.activityFilter='';state.pageNum=1;setNavigation(page);$('#mainContent').innerHTML='<div class="loading">Đang tải dữ liệu...</div>';try{if(page==='dashboard')return await dashboard();if(page==='campaigns')return await renderCampaigns();if(page==='products')return await renderProducts();if(page==='reports')return await reports();if(page==='settings')return await settings();return await listing()}catch(e){$('#mainContent').innerHTML=`<div class="panel"><p>${esc(e.message)}</p><button class="outline" onclick="navigate('${page}')">Tải lại</button></div>`}}
+async function navigate(page){if(page==='bookings')page='campaigns';if(!LABELS[page])return;state.page=page;state.search='';state.filter='';state.groupFilter='';state.videoGroupFilter='';state.productGroupFilter='';state.activityFilter='';state.pageNum=1;setNavigation(page);$('#mainContent').innerHTML='<div class="loading">Đang tải dữ liệu...</div>';try{if(page==='dashboard')return await dashboard();if(page==='campaigns')return await renderCampaigns();if(page==='products')return await renderProducts();if(page==='reports')return await reports();if(page==='staff')return await staffProfiles();if(page==='dailyreport')return await dailyReport();if(page==='settings')return await settings();return await listing()}catch(e){$('#mainContent').innerHTML=`<div class="panel"><p>${esc(e.message)}</p><button class="outline" onclick="navigate('${page}')">Tải lại</button></div>`}}
 function title(eyebrow,name,description,actions=''){
  const label = name==='Danh sách KOC/KOL'?'Đối tác KOC/KOL':name==='Chào mừng trở lại 👋'?'Tổng quan':name==='Cài đặt CRM'?'Cài đặt':name;
  return `<div class="page-head"><h1>${esc(label)}</h1><div class="page-actions">${actions}</div></div>`;
@@ -806,6 +830,47 @@ function staffModal(user=null){const existing=!!user;simpleModal(existing?'Chỉ
 
 /* V6: Product campaign tracker. Confirmed counts use unique partner IDs per campaign. */
 const CONFIRMED_BOOKING = new Set(['Đã chốt','Đang thực hiện','Hoàn thành']);
+async function staffProfiles(){
+ let users=[],bookings=[],videos=[],tasks=[],campaigns=[];
+ try{[users,bookings,videos,tasks,campaigns]=await Promise.all([api('/api/users').then(r=>r.rows||[]).catch(()=>[]),getAll('bookings'),getAll('videos'),getAll('tasks'),getAll('campaigns')])}catch(e){}
+ const names=new Set();users.forEach(u=>{if(u.active)names.add(u.name)});bookings.forEach(b=>{if(b.owner)names.add(b.owner)});campaigns.forEach(c=>{if(c.owner)names.add(c.owner)});tasks.forEach(t=>{if(t.owner)names.add(t.owner)});
+ const bkById=new Map(bookings.map(b=>[Number(b.id),b]));
+ const rows=[...names].map(name=>{
+  const bk=bookings.filter(b=>b.owner===name);const confirmed=bk.filter(b=>CONFIRMED_BOOKING.has(b.status));
+  const revenue=confirmed.reduce((a,b)=>a+Number(b.booking_fee||0),0);
+  const partnersHandled=new Set(bk.map(b=>Number(b.partner_id)).filter(Boolean)).size;
+  const vids=videos.filter(v=>{const b=bkById.get(Number(v.booking_id));return b&&b.owner===name&&v.status==='Đã đăng'}).length;
+  const lives=confirmed.filter(b=>b.live_status==='Đã live').length;
+  const doneTasks=tasks.filter(t=>t.owner===name&&t.status==='Hoàn thành').length;
+  const u=users.find(x=>x.name===name);
+  return {name,role:u?.role,email:u?.email,partners:partnersHandled,bookings:bk.length,confirmed:confirmed.length,revenue,videos:vids,lives,doneTasks};
+ }).sort((a,b)=>b.revenue-a.revenue||b.confirmed-a.confirmed||a.name.localeCompare(b.name,'vi'));
+ const totalRev=rows.reduce((a,r)=>a+r.revenue,0),top=rows[0];
+ const roleLabel=r=>r==='admin'?'Quản trị viên':r==='manager'?'Quản lý':r==='staff'?'Nhân viên':'Chưa có tài khoản';
+ const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+ const cards=rows.map((r,i)=>`<div class="staff-card ${i===0?'staff-top':''}"><div class="staff-card-head"><div class="staff-rank">${medal(i)}</div><div class="staff-avatar">${esc((r.name||'?')[0].toUpperCase())}</div><div class="staff-id"><strong>${esc(r.name)}</strong><small>${esc(roleLabel(r.role))}${r.email?' · '+esc(r.email):''}</small></div></div><div class="staff-revenue"><small>DOANH THU MANG VỀ (CAST ĐÃ CHỐT)</small><b>${money(r.revenue)}</b></div><div class="staff-kpis"><div><span>${num(r.partners)}</span><small>Đối tác</small></div><div><span>${num(r.confirmed)}</span><small>Booking chốt</small></div><div><span>${num(r.videos)}</span><small>Video đăng</small></div><div><span>${num(r.lives)}</span><small>Live</small></div><div><span>${num(r.doneTasks)}</span><small>Task xong</small></div></div></div>`).join('')||'<div class="panel"><p class="muted">Chưa có nhân sự hoặc dữ liệu phụ trách.</p></div>';
+ $('#mainContent').innerHTML=title('Đội ngũ / CERISH','Hồ sơ nhân sự','Hiệu suất từng nhân sự: đối tác phụ trách, booking chốt, doanh thu mang về, video/live, công việc. Xếp hạng theo doanh thu.','')+
+  `<div class="summary-grid">${card('Tổng nhân sự',num(rows.length),'Có dữ liệu phụ trách','♟')}${card('Tổng doanh thu đội',money(totalRev),'Cast đã chốt toàn đội','₫')}${card('Dẫn đầu doanh thu',top?esc(top.name):'—',top?money(top.revenue):'Chưa có','🥇')}</div>`+
+  `<div class="staff-grid">${cards}</div>`;
+}
+async function dailyReport(){
+ let bookings=[],videos=[],lives=[],tasks=[],partners=[];
+ try{[bookings,videos,lives,tasks,partners]=await Promise.all([getAll('bookings'),getAll('videos'),getAll('lives'),getAll('tasks'),getAll('partners')])}catch(e){}
+ const localToday=()=>{const n=new Date();return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+ const d=state._reportDate||localToday();
+ const prev=new Date(new Date(d).getTime()-86400000).toISOString().slice(0,10);
+ const onDay=(arr,field,day)=>arr.filter(r=>String(r[field]||'').slice(0,10)===day);
+ const metrics=day=>{const vids=onDay(videos.filter(v=>v.status==='Đã đăng'),'posted_date',day);const lvs=onDay(lives,'session_date',day);const bkC=onDay(bookings,'contact_date',day);const tsk=onDay(tasks,'due_date',day);const gmv=vids.reduce((a,v)=>a+Number(v.gmv||0),0)+lvs.reduce((a,l)=>a+Number(l.gmv||0),0);const orders=vids.reduce((a,v)=>a+Number(v.orders||0),0)+lvs.reduce((a,l)=>a+Number(l.orders||0),0);return {videos:vids.length,lives:lvs.length,contacts:bkC.length,tasks:tsk.length,tasksDone:tsk.filter(t=>t.status==='Hoàn thành').length,gmv,orders,vidsList:vids,tskList:tsk}};
+ const m=metrics(d),pv=metrics(prev);
+ const delta=(now,was)=>{const diff=now-was;if(was===0&&now===0)return '';const cls=diff>0?'good':diff<0?'bad':'';const sign=diff>0?'▲':diff<0?'▼':'•';return `<span class="dr-delta ${cls}">${sign} ${num(Math.abs(diff))} vs hôm trước</span>`};
+ const partnerName=id=>partners.find(x=>Number(x.id)===Number(id))?.name||'Đối tác';
+ const vidRows=m.vidsList.map(v=>`<tr><td>${esc(v.title||'Video')}</td><td>${esc(partnerName(v.partner_id))}</td><td>${num(v.views||0)}</td><td>${num(v.orders||0)}</td><td>${money(v.gmv||0)}</td></tr>`).join('')||'<tr><td colspan="5" class="muted">Không có video đăng trong ngày.</td></tr>';
+ const tskRows=m.tskList.map(t=>`<tr><td>${esc(t.title||'—')}</td><td><span class="tag ${t.status==='Hoàn thành'?'ok':''}">${esc(t.status||'—')}</span></td></tr>`).join('')||'<tr><td colspan="2" class="muted">Không có công việc đến hạn.</td></tr>';
+ $('#mainContent').innerHTML=title('Vận hành / CERISH','Báo cáo hàng ngày','Tổng hợp hoạt động trong ngày: video đăng, livestream, booking liên hệ, công việc đến hạn và doanh thu ghi nhận.',`<input type="date" id="reportDatePick" value="${d}" class="dr-date">`)+
+  `<div class="summary-grid">${card('Doanh thu trong ngày',money(m.gmv),delta(m.gmv,pv.gmv)||'GMV video + live','₫')}${card('Video đã đăng',num(m.videos),delta(m.videos,pv.videos)||'Trong ngày','▷')}${card('Livestream',num(m.lives),delta(m.lives,pv.lives)||'Phiên live','◉')}${card('Booking liên hệ',num(m.contacts),delta(m.contacts,pv.contacts)||'Mới liên hệ','▣')}</div>`+
+  `<div class="content-grid"><section class="panel"><div class="panel-head"><div><h3>Video đăng trong ngày</h3><p>${num(m.videos)} video · ${num(m.orders)} đơn · ${money(m.gmv)} GMV</p></div></div><div class="table-scroll"><table class="dr-table"><thead><tr><th>VIDEO</th><th>ĐỐI TÁC</th><th>LƯỢT XEM</th><th>ĐƠN</th><th>GMV</th></tr></thead><tbody>${vidRows}</tbody></table></div></section><section class="panel"><div class="panel-head"><div><h3>Công việc đến hạn</h3><p>${num(m.tasksDone)}/${num(m.tasks)} hoàn thành</p></div></div><div class="table-scroll"><table class="dr-table"><thead><tr><th>CÔNG VIỆC</th><th>TRẠNG THÁI</th></tr></thead><tbody>${tskRows}</tbody></table></div></section></div>`;
+ const dp=$('#reportDatePick');if(dp)dp.onchange=()=>{state._reportDate=dp.value;dailyReport()};
+}
 async function loadCampaigns(){state.campaigns=await getAll('campaigns');return state.campaigns}
 const campaignDetails = {name:'Tên chiến dịch',product_id:'Sản phẩm',product:'Tên sản phẩm',sku:'Mã sản phẩm',target_koc:'Mục tiêu KOC',target_kol:'Mục tiêu KOL',target_videos:'Mục tiêu Video',target_lives:'Mục tiêu Live',start_date:'Bắt đầu',end_date:'Kết thúc',owner:'Phụ trách',status:'Trạng thái',notes:'Ghi chú'};
 const campaignStatus=['Chuẩn bị','Đang chạy','Tạm dừng','Hoàn thành'];
