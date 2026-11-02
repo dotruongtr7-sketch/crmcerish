@@ -513,8 +513,9 @@ window.demoExport=function(table){
 // Huy hiệu trạng thái
 document.addEventListener('DOMContentLoaded',function(){
  var b=document.createElement('div');
- b.style.cssText='position:fixed;bottom:18px;left:18px;z-index:97;background:#fff;border:1px solid #e8dce4;border-radius:9px;box-shadow:0 8px 28px rgba(60,32,48,.12);padding:9px 13px;font:600 10.5px "Segoe UI",sans-serif;color:#8d7b88;display:flex;gap:8px;align-items:center';
- b.innerHTML='<span style="width:7px;height:7px;border-radius:50%;background:#3ecf8e;display:inline-block"></span>Dữ liệu đồng bộ Supabase · tải lại trang để thấy thay đổi của người khác';
+ b.style.cssText='position:fixed;bottom:18px;left:18px;z-index:97;background:#fff;border:1px solid #e8dce4;border-radius:50%;box-shadow:0 8px 28px rgba(60,32,48,.12);padding:8px;display:flex;align-items:center;cursor:default';
+ b.title='Đã đồng bộ Supabase · tải lại trang để thấy thay đổi của người khác';
+ b.innerHTML='<span style="width:9px;height:9px;border-radius:50%;background:#3ecf8e;display:inline-block"></span>';
  document.body.appendChild(b);
  if(!SB_URL||!SB_KEY){
   var ov=document.createElement('div');
