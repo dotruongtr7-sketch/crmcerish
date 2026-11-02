@@ -575,7 +575,7 @@ body{font-family:Arial,'Segoe UI',sans-serif;color:#1d1c1f;background:#f9f8f8;fo
     <nav id="navMain">
       <button class="nav-item active" data-page="dashboard"><span class="nav-icon">◫</span><span>Tổng quan</span></button>
       <button class="nav-item" data-page="partners"><span class="nav-icon">♧</span><span>Đối tác KOC/KOL</span></button>
-      <button class="nav-item" data-page="campaigns"><span class="nav-icon">◈</span><span>Chiến dịch sản phẩm</span></button>
+      <button class="nav-item" data-page="campaigns"><span class="nav-icon">◈</span><span>Chiến dịch booking</span></button>
       <button class="nav-item" data-page="products"><span class="nav-icon">◈</span><span>Sản phẩm</span></button>
 
       <button class="nav-item" data-page="lives"><span class="nav-icon">◉</span><span>Livestream</span></button>
@@ -626,7 +626,7 @@ const num = v => new Intl.NumberFormat('vi-VN',{maximumFractionDigits:0}).format
 const compact = v => (Number(v)>=1e6 ? (Number(v)/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr' : Number(v)>=1000 ? (Number(v)/1000).toLocaleString('vi-VN',{maximumFractionDigits:1})+'k' : num(v));
 const shortDate = v => {if(!v)return '—'; const d=String(v).slice(0,10).split('-');return d.length===3?`${d[2]}/${d[1]}/${d[0]}`:esc(v)};
 const LABELS = {
- dashboard:'Tổng quan', partners:'Đối tác KOC/KOL', bookings:'Booking hợp tác', campaigns:'Chiến dịch sản phẩm', products:'Sản phẩm', samples:'Theo dõi hàng mẫu',
+ dashboard:'Tổng quan', partners:'Đối tác KOC/KOL', bookings:'Booking hợp tác', campaigns:'Chiến dịch booking', products:'Sản phẩm', samples:'Theo dõi hàng mẫu',
  videos:'Video & nội dung', lives:'Livestream', tasks:'Công việc', customers:'Khách hàng',
  reports:'Báo cáo hiệu quả', settings:'Cài đặt'
 };
@@ -643,7 +643,7 @@ const SUBS = {
 };
 const fields = {
  partners:[['name','Tên đối tác','text',1],['type','Loại đối tác','select',0,['KOC','KOL','Affiliate','Creator','MC Live','Agency']],['activity_mode','Hình thức hoạt động','select',0,['Live','Video','Cả hai']],['live_groups','Nhóm sản phẩm chuyên Live','text'],['video_groups','Nhóm sản phẩm chuyên Video','text'],['platform','Nền tảng','select',0,['TikTok','Shopee','Facebook','Instagram','Khác']],['handle','Tên tài khoản / ID','text'],['phone','Số điện thoại','tel'],['email','Email','email'],['followers','Người theo dõi','number'],['stage','Giai đoạn','select',0,['Tiềm năng','Đã liên hệ','Đang đàm phán','Đang hợp tác','Tạm dừng','Ngừng hợp tác']],['commission','Hoa hồng (%)','number'],['owner','Nhân sự phụ trách','text'],['notes','Ghi chú','textarea']],
- bookings:[['partner_id','Tên kênh / Đối tác','partner',1],['contact_date','Ngày liên hệ','date'],['campaign_id','Chiến dịch sản phẩm','campaign'],['campaign','Tên chiến dịch / ghi chú','text',1],['product','Sản phẩm','text'],['owner','Người phụ trách','text'],['content_type','Hình thức booking','select',0,['Video','Live','Cả hai']],['video_status','Tiến độ video','select',0,['Chưa đăng','Đã đăng','Không áp dụng']],['live_status','Tiến độ Live','select',0,['Chưa live','Đã live','Không áp dụng']],['status','Tình trạng','select',0,['Đề xuất','Đang đàm phán','Đã chốt','Đang thực hiện','Hoàn thành','Đã hủy']],['deal_type','Hình thức','select',0,['Cast + %AFF','Chỉ %AFF','Cast cố định','Gửi mẫu','Khác']],['booking_fee','Cast (₫)','number'],['commission','Hoa hồng AFF (%)','number'],['deal_details','Chi tiết deal','textarea'],['deadline','Deadline – hạn cuối','date'],['video_date','Ngày đăng video dự kiến','date'],['live_date','Ngày Live dự kiến','date'],['booking_note','Booking note','textarea'],['notes','Ghi chú nội bộ','textarea']],
+ bookings:[['partner_id','Tên kênh / Đối tác','partner',1],['contact_date','Ngày liên hệ','date'],['campaign_id','Chiến dịch booking','campaign'],['campaign','Tên chiến dịch / ghi chú','text',1],['product','Sản phẩm','text'],['owner','Người phụ trách','text'],['content_type','Hình thức booking','select',0,['Video','Live','Cả hai']],['video_status','Tiến độ video','select',0,['Chưa đăng','Đã đăng','Không áp dụng']],['live_status','Tiến độ Live','select',0,['Chưa live','Đã live','Không áp dụng']],['status','Tình trạng','select',0,['Đề xuất','Đang đàm phán','Đã chốt','Đang thực hiện','Hoàn thành','Đã hủy']],['deal_type','Hình thức','select',0,['Cast + %AFF','Chỉ %AFF','Cast cố định','Gửi mẫu','Khác']],['booking_fee','Cast (₫)','number'],['commission','Hoa hồng AFF (%)','number'],['deal_details','Chi tiết deal','textarea'],['deadline','Deadline – hạn cuối','date'],['video_date','Ngày đăng video dự kiến','date'],['live_date','Ngày Live dự kiến','date'],['booking_note','Booking note','textarea'],['notes','Ghi chú nội bộ','textarea']],
  samples:[['partner_id','Đối tác','partner',1],['product_id','Liên kết sản phẩm','product'],['product','Sản phẩm gửi','text',1],['quantity','Số lượng','number'],['sent_date','Ngày gửi','date'],['received_date','Ngày nhận','date'],['tracking_code','Mã vận đơn','text'],['status','Trạng thái','select',0,['Chuẩn bị','Đã gửi','Đang vận chuyển','Đã nhận','Đã hủy']],['owner','Người phụ trách','text'],['notes','Ghi chú','textarea']],
  videos:[['partner_id','Đối tác','partner',1],['title','Tiêu đề video','text',1],['platform','Nền tảng','select',0,['TikTok','Shopee','Facebook','Instagram']],['url','Link video','url'],['posted_date','Ngày đăng','date'],['views','Lượt xem','number'],['orders','Đơn hàng','number'],['gmv','GMV (₫)','number'],['status','Trạng thái','select',0,['Chờ đăng','Đã đăng','Cần chỉnh sửa','Đã gỡ']],['notes','Ghi chú','textarea']],
  lives:[['partner_id','Đối tác','partner',1],['title','Tên phiên livestream','text',1],['session_date','Ngày livestream','date'],['duration_minutes','Thời lượng (phút)','number'],['views','Lượt xem','number'],['orders','Đơn hàng','number'],['gmv','GMV (₫)','number'],['commission','Hoa hồng (%)','number'],['status','Trạng thái','select',0,['Dự kiến','Đã diễn ra','Đã hủy']],['notes','Ghi chú','textarea']],
@@ -789,7 +789,7 @@ function staffModal(user=null){const existing=!!user;simpleModal(existing?'Chỉ
 /* V6: Product campaign tracker. Confirmed counts use unique partner IDs per campaign. */
 const CONFIRMED_BOOKING = new Set(['Đã chốt','Đang thực hiện','Hoàn thành']);
 async function loadCampaigns(){state.campaigns=await getAll('campaigns');return state.campaigns}
-const campaignDetails = {name:'Tên chiến dịch',product_id:'Sản phẩm phụ trách',product:'Tên sản phẩm',sku:'Mã sản phẩm',target_koc:'Mục tiêu KOC',target_kol:'Mục tiêu KOL',target_videos:'Mục tiêu Video',target_lives:'Mục tiêu Live',start_date:'Bắt đầu',end_date:'Kết thúc',owner:'Phụ trách',status:'Trạng thái',notes:'Ghi chú'};
+const campaignDetails = {name:'Tên chiến dịch',product_id:'Sản phẩm',product:'Tên sản phẩm',sku:'Mã sản phẩm',target_koc:'Mục tiêu KOC',target_kol:'Mục tiêu KOL',target_videos:'Mục tiêu Video',target_lives:'Mục tiêu Live',start_date:'Bắt đầu',end_date:'Kết thúc',owner:'Phụ trách',status:'Trạng thái',notes:'Ghi chú'};
 const campaignStatus=['Chuẩn bị','Đang chạy','Tạm dừng','Hoàn thành'];
 let campaignBookings=[];
 const uniq=arr=>new Set(arr.map(x=>Number(x.partner_id))).size;
@@ -844,7 +844,7 @@ async function renderCampaigns(){
  const selected=cs.find(c=>String(c.id)===String(state.selectedCampaignId));
  const sumStats=cs.map(c=>campaignStats(c.id,campaignBookings,state.partners));
  const totalConfirmed=new Set(cs.flatMap((c,i)=>sumStats[i].confirmed.map(b=>c.id+':'+b.partner_id))).size;
- $('#mainContent').innerHTML=title('','Chiến dịch sản phẩm','',`<button class="primary" id="createCampaign">＋ Tạo chiến dịch</button>`)+
+ $('#mainContent').innerHTML=title('','Chiến dịch booking','',`<button class="primary" id="createCampaign">＋ Tạo chiến dịch</button>`)+
  `<div class="summary-grid campaign-top-summary">${card('Tổng chiến dịch',num(cs.length),'','◈')}${card('Đang chạy',num(cs.filter(c=>c.status==='Đang chạy').length),'','◉')}${card('Đối tác đã chốt',num(totalConfirmed),'','♧')}${card('Cần đàm phán',num(campaignBookings.filter(b=>b.campaign_id&&b.status==='Đang đàm phán').length),'','▣')}</div>`+
  `${unassignedBookings.length?`<div class="v10-unassigned"><div><strong>${unassignedBookings.length} booking cũ chưa gắn chiến dịch</strong><p>Chọn “Gắn chiến dịch” để đưa vào tiến độ.</p></div><div class="v10-unassigned-items">${unassignedBookings.map(b=>`<div><span>${esc(state.partners.find(p=>p.id===Number(b.partner_id))?.name||b.partner_name||'Đối tác')}</span><button class="outline v10-mini" data-attach-booking="${b.id}">Gắn chiến dịch</button></div>`).join('')}</div></div>`:''}`+
  `<section class="campaign-list-wide" aria-label="Danh sách chiến dịch">
@@ -978,10 +978,10 @@ const sheetSpecs=[
  ['platform','NỀN TẢNG','select',98,['TikTok','Shopee','Facebook','Instagram','Khác']],
  ['type','LOẠI','select',100,['KOC','KOL','Affiliate','Creator','MC Live','Agency']],
  ['activity_mode','HÌNH THỨC','select',104,['Live','Video','Cả hai']],
-  ['live_groups','CHUYÊN LIVE','groups',170],['video_groups','CHUYÊN VIDEO','groups',170],
+  ['live_groups','CHUYÊN LIVE','groups',118],['video_groups','CHUYÊN VIDEO','groups',118],
  ['followers','FOLLOWER','number',96],
  ['stage','GIAI ĐOẠN','select',138,['Tiềm năng','Đã liên hệ','Đang đàm phán','Đang hợp tác','Tạm dừng','Ngừng hợp tác']],
- ['commission','HOA HỒNG TRUNG BÌNH','number',170],['owner','INSIGHT','text',112],
+ ['commission','% AFF','number',90],['owner','INSIGHT KOC','text',140],
  ['sample_size','SIZE MẪU','text',100],['notes','GHI CHÚ','text',165]
 ];
 const bookingInlineSpecs={
