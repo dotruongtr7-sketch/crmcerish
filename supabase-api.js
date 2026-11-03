@@ -517,13 +517,8 @@ window.demoExport=function(table){
  }catch(e){}
 };
 
-// Huy hiệu trạng thái
+// Cảnh báo khi chưa cấu hình Supabase
 document.addEventListener('DOMContentLoaded',function(){
- var b=document.createElement('div');
- b.style.cssText='position:fixed;bottom:18px;left:18px;z-index:97;background:#fff;border:1px solid #e8dce4;border-radius:50%;box-shadow:0 8px 28px rgba(60,32,48,.12);padding:8px;display:flex;align-items:center;cursor:default';
- b.title='Đã đồng bộ Supabase · tải lại trang để thấy thay đổi của người khác';
- b.innerHTML='<span style="width:9px;height:9px;border-radius:50%;background:#3ecf8e;display:inline-block"></span>';
- document.body.appendChild(b);
  if(!SB_URL||!SB_KEY){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;z-index:98;display:grid;place-items:center;background:#f9f8f8;font:600 13px "Segoe UI",sans-serif;color:#6d425b;text-align:center;padding:20px';
