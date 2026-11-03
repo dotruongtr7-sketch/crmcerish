@@ -306,6 +306,13 @@ async function handle(path,opts){
   }
   return {ok:true};
  }
+ if(parts[1]==='users'&&parts[2]&&method==='DELETE'){
+  adminOnly();
+  var uid=Number(parts[2]);
+  await rpc('cerish_user_delete',{p_token:getToken(),p_id:uid});
+  db.users=db.users.filter(function(x){return Number(x.id)!==uid});
+  return {ok:true};
+ }
  if(parts[1]==='password'&&method==='POST'){
   currentUser();
   await rpc('cerish_password',{p_token:getToken(),p_current_password:body.current_password,p_new_password:body.new_password});
