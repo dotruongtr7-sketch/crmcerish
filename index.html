@@ -71,6 +71,7 @@ input::placeholder,textarea::placeholder{color:#6a6870;opacity:1}
 .sheet-row-actions{min-width:100px;width:100px;text-align:center}
 .sheet-save-new,.sheet-detail-btn{border:1px solid #c8b8c1;border-radius:6px;background:white;color:#452a38;padding:7px 10px;font-size:11px;font-weight:800;white-space:nowrap}
 .sheet-save-new{background:#6d425b;color:#fff;border-color:#6d425b}
+.sheet-autosave-hint{color:#b3a4ad;font-size:10px;font-style:italic;letter-spacing:.3px}
 .sheet-row-actions .sheet-detail-btn:hover{background:#f6ebf1}
 .sheet-bottom{border-top:1px solid #ebe4e9;background:#fbfafb;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 17px;font-size:11px;color:#49434b}
 .sheet-add-inline{border:0;background:transparent;color:#634057;font-size:12px;font-weight:800;cursor:pointer}
@@ -827,7 +828,7 @@ async function editModal(table,item=null,preset={}){try{await loadPartners();if(
     if(sel){sel.onchange=apply;if(!item&&sel.value)apply()}
   }
   if(table==='bookings'){const campaignSelect=$('#recordForm [name=campaign_id]');campaignSelect?.dispatchEvent(new Event('change'));const cast=$('#recordForm [name=booking_fee]');const update=()=>{$('#liveKpi').textContent=money((Number(cast.value)||0)/20*100)};cast?.addEventListener('input',update);update()}
- $('#recordForm').onsubmit=async e=>{e.preventDefault();const btn=$('#recordForm button[type=submit]');btn.disabled=true;let values={};let formData=new FormData(e.target);for(let [key,val] of formData.entries()){if(key==='campaign_id'&&val===''){values[key]=0;continue;}if(key==='partner_id'&&val===''){if(table==='tasks')values[key]=null;continue;}values[key]=val}try{if(table==='bookings'&&!Number(values.campaign_id))throw new Error('Hãy chọn chiến dịch sản phẩm trước khi lưu booking');if(item)await api(`/api/data/${table}/${item.id}`,{method:'PATCH',body:JSON.stringify({data:values})});else await api(`/api/data/${table}`,{method:'POST',body:JSON.stringify({data:values})});closeModal();state.partners=[];toast(item?'Đã lưu thay đổi':'Đã tạo bản ghi mới');if(state.page==='dashboard')dashboard();else if(state.page==='campaigns')renderCampaigns();else if(state.page==='reports')reports();else if(state.page==='settings')settings();else listing()}catch(err){toast(err.message,true);btn.disabled=false}};
+ $('#recordForm').onsubmit=async e=>{e.preventDefault();const btn=$('#recordForm button[type=submit]');btn.disabled=true;let values={};let formData=new FormData(e.target);for(let [key,val] of formData.entries()){if(key==='campaign_id'&&val===''){values[key]=0;continue;}if(key==='partner_id'&&val===''){if(table==='tasks')values[key]=null;continue;}values[key]=val}try{if(table==='bookings'&&!Number(values.campaign_id))throw new Error('Hãy chọn chiến dịch sản phẩm trước khi lưu booking');if(table==='partners'&&String(values.handle||'').trim()){const dup=await findDuplicateHandle(values.handle,item?.id);if(dup)throw new Error('ID kênh "'+String(values.handle).trim()+'" đã trùng với KOC "'+(dup.name||'khác')+'". Đổi ID khác rồi lưu.');}if(item)await api(`/api/data/${table}/${item.id}`,{method:'PATCH',body:JSON.stringify({data:values})});else await api(`/api/data/${table}`,{method:'POST',body:JSON.stringify({data:values})});closeModal();state.partners=[];toast(item?'Đã lưu thay đổi':'Đã tạo bản ghi mới');if(state.page==='dashboard')dashboard();else if(state.page==='campaigns')renderCampaigns();else if(state.page==='reports')reports();else if(state.page==='settings')settings();else listing()}catch(err){toast(err.message,true);btn.disabled=false}};
  }catch(e){toast(e.message,true)}}
 function closeModal(){$('#modalWrap').classList.add('hidden')}
 async function reports(){const [x,y]=await Promise.all([api('/api/analytics/report'),api('/api/analytics/summary')]);const rows=x.rows;const sum=(key)=>rows.reduce((a,r)=>a+Number(r[key]||0),0);
@@ -1137,7 +1138,7 @@ function partnerSheetCell(r,s,isNew=false){let [key,title,kind]=s;
  if(key==='followers'||key==='commission'){const ff=key==='followers'?fmtFollowers(val):fmtPct(val);const ov=ff!==''?esc(ff):'';return `<td data-col="${esc(key)}" class="fmt-cell-td">${inp}<span class="fmt-overlay">${ov}</span></td>`;}
  return `<td data-col="${esc(key)}">${inp}</td>`;
 }
-function blankPartnerRow(){return `<tr class="sheet-new-row" data-new="true"><td class="sheet-index"><span class="new-row-icon">＋</span></td>${sheetSpecs.map(s=>partnerSheetCell({},s,true)).join('')}<td class="sheet-row-actions"><button class="sheet-save-new" title="Lưu KOC mới">✓ Lưu dòng</button></td></tr>`}
+function blankPartnerRow(){return `<tr class="sheet-new-row" data-new="true"><td class="sheet-index"><span class="new-row-icon">＋</span></td>${sheetSpecs.map(s=>partnerSheetCell({},s,true)).join('')}<td class="sheet-row-actions"><span class="sheet-autosave-hint" title="Điền TÊN KÊNH rồi rời khỏi dòng là tự lưu">tự lưu</span></td></tr>`}
 async function partnerSheet(data){let nPages=Math.max(1,Math.ceil(data.total/state.perPage)),statuses=STATUS.partners;
  let rows=data.rows.map((r,i)=>`<tr data-sheet-id="${r.id}"><td class="sheet-index">${num((state.pageNum-1)*state.perPage+i+1)}</td>${sheetSpecs.map(s=>partnerSheetCell(r,s)).join('')}<td class="sheet-row-actions"><div class="row-actions"><button class="sheet-detail-btn" data-detail="${r.id}" title="Xem hồ sơ">Xem</button><button class="sheet-detail-btn" data-clone="${r.id}" title="Nhân bản dòng">⧉</button><button class="sheet-detail-btn delete-row" data-delete="${r.id}" title="Xoá dòng">×</button></div></td></tr>`).join('');
  $('#mainContent').innerHTML=title('QUẢN LÝ ĐỐI TÁC / CERISH','Danh sách KOC/KOL','Nhập liệu như Google Sheets. Phân loại KOC chuyên Live, Video hoặc cả hai; lọc theo nhóm sản phẩm.',`<span class="sheet-save-state compact" id="sheetSaveState" aria-live="polite">✓ Đã lưu</span><button class="secondary" id="exportBtn">↓ Xuất CSV</button><button class="primary" id="addSheetRow">＋ Thêm dòng</button>`)+
@@ -1174,10 +1175,10 @@ function bindPartnerSheetRow(tr){
  if(tr.dataset.sheetBound)return;tr.dataset.sheetBound='1';
  const id=tr.dataset.sheetId, isNew=tr.dataset.new==='true';
  $$('.sheet-entry',tr).forEach(el=>{
-   el.addEventListener('focus',()=>el.closest('td')?.classList.add('editing'));
-   el.addEventListener('blur',()=>{el.closest('td')?.classList.remove('editing');if(!isNew)savePartnerCell(el,id)});
+   el.addEventListener('focus',()=>{const td=el.closest('td');td?.classList.add('editing');td?.classList.remove('sheet-error')});
+   el.addEventListener('blur',()=>{el.closest('td')?.classList.remove('editing');if(!isNew)savePartnerCell(el,id);else setTimeout(()=>autoSaveNewRow(tr),160)});
    if(el.dataset.key==='followers'||el.dataset.key==='commission')el.addEventListener('blur',()=>{const ov=el.closest('td')?.querySelector('.fmt-overlay');if(!ov)return;const ff=el.dataset.key==='followers'?fmtFollowers(el.value):fmtPct(el.value);ov.innerHTML=ff!==''?esc(ff):''});
-   if(el.tagName==='SELECT')el.addEventListener('change',()=>{if(!isNew)savePartnerCell(el,id)});
+   if(el.tagName==='SELECT')el.addEventListener('change',()=>{if(!isNew)savePartnerCell(el,id);else setTimeout(()=>autoSaveNewRow(tr),160)});
    el.addEventListener('keydown',ev=>{
      if(ev.key==='Escape'){el.value=el.dataset.original||'';el.blur();ev.preventDefault();return}
      if(ev.key==='Enter'){ev.preventDefault();let key=el.dataset.key;el.blur();const rows=$$('#partnerSheetBody tr');const ri=rows.indexOf(tr)+(ev.shiftKey?-1:1);if(rows[ri]){const next=rows[ri].querySelector(`[data-key="${key}"]`);next?.focus();next?.select?.()}}
@@ -1185,14 +1186,20 @@ function bindPartnerSheetRow(tr){
  });
  $$('.group-editor-btn',tr).forEach(groupBtn=>groupBtn.onclick=()=>openGroupsEditor(groupBtn,id,isNew));
  $$('.cell-popedit',tr).forEach(btn=>btn.onclick=()=>openCellPopover(btn,id,btn.dataset.key));
- const saveBtn=$('.sheet-save-new',tr);if(saveBtn)saveBtn.onclick=()=>saveNewPartner(tr);
+ if(isNew){const gw=$$('.group-editor-btn',tr);gw.forEach(b=>b.addEventListener('blur',()=>setTimeout(()=>autoSaveNewRow(tr),160)))}
 }
 const pendingSheetSaves = new Map();
+async function findDuplicateHandle(value,excludeId){
+ const v=String(value||'').trim().toLowerCase();if(!v)return null;
+ await loadPartners();
+ return state.partners.find(p=>String(p.id)!==String(excludeId??'')&&String(p.handle||'').trim().toLowerCase()===v)||null;
+}
 async function savePartnerCell(el,id){
  const key=el.dataset.key,previous=el.dataset.original??'',value=el.value;
  if(value===previous)return;
  const required=key==='name';if(required&&!value.trim()){el.value=previous;toast('Tên kênh không được trống',true);return}
  let invalid=el.validity&&!el.validity.valid;if(invalid){el.value=previous;toast('Giá trị không hợp lệ',true);return}
+ if(key==='handle'&&value.trim()){const dup=await findDuplicateHandle(value,id);const td=el.closest('td');if(dup){td?.classList.remove('sheet-saving','sheet-saved');td?.classList.add('sheet-error');setSheetSaveState('⚠ Trùng ID kênh','error');toast('ID kênh "'+value.trim()+'" đã trùng với KOC "'+(dup.name||'khác')+'". Chưa lưu.',true);return}td?.classList.remove('sheet-error')}
  const queueKey=id+':'+key;
  const prior=pendingSheetSaves.get(queueKey)||Promise.resolve();
  el.closest('td')?.classList.add('sheet-saving');setSheetSaveState('◌ Đang lưu...','saving');
@@ -1207,13 +1214,22 @@ async function savePartnerCell(el,id){
  }catch(err){el.closest('td')?.classList.remove('sheet-saving');el.closest('td')?.classList.add('sheet-error');setSheetSaveState('⚠ Lỗi lưu','error');toast('Chưa lưu được: '+err.message,true);}
  finally{if(pendingSheetSaves.get(queueKey)===job)pendingSheetSaves.delete(queueKey)}
 }
-async function saveNewPartner(tr){
+async function autoSaveNewRow(tr){
+ if(!tr||!tr.isConnected||tr.dataset.saving==='1')return;
+ if(tr.contains(document.activeElement))return;            // còn đang nhập trong dòng này → chưa lưu
  const entries=$$('.sheet-entry',tr);const data=Object.fromEntries(entries.map(x=>[x.dataset.key,x.value]));for(const key of ['live_groups','video_groups'])data[key]=tr.querySelector(`.group-editor-btn[data-field="${key}"]`)?.dataset.groups||'';
- if(!String(data.name||'').trim()){toast('Vui lòng nhập TÊN KÊNH trước khi lưu',true);tr.querySelector('[data-key=name]')?.focus();return}
- const invalid=entries.find(el=>el.validity&&!el.validity.valid);if(invalid){toast('Kiểm tra lại ô '+invalid.dataset.key,true);invalid.focus();return}
- const btn=$('.sheet-save-new',tr);btn.disabled=true;btn.textContent='Đang lưu...';setSheetSaveState('◌ Đang lưu...','saving');
- try{await api('/api/data/partners',{method:'POST',body:JSON.stringify({data})});state.partners=[];toast('✓ Đã thêm đối tác mới');setSheetSaveState('✓ Đã lưu','saved');await listing()}
- catch(err){btn.disabled=false;btn.textContent='✓ Lưu dòng';setSheetSaveState('⚠ Lỗi lưu','error');toast(err.message,true)}
+ if(!String(data.name||'').trim())return;                  // chưa có TÊN KÊNH → chưa tạo dòng
+ tr.dataset.saving='1';const clear=()=>{tr.dataset.saving=''};   // chốt sớm, tránh 2 blur tạo trùng dòng
+ const invalid=entries.find(el=>el.validity&&!el.validity.valid);if(invalid){invalid.closest('td')?.classList.add('sheet-error');toast('Kiểm tra lại ô '+(invalid.dataset.key||''),true);return clear()}
+ const handleEl=tr.querySelector('.sheet-entry[data-key=handle]');
+ if(String(data.handle||'').trim()){
+  const dup=await findDuplicateHandle(data.handle,null);
+  if(dup){handleEl?.closest('td')?.classList.add('sheet-error');setSheetSaveState('⚠ Trùng ID kênh','error');toast('ID kênh "'+String(data.handle).trim()+'" đã trùng với KOC "'+(dup.name||'khác')+'". Đổi ID khác rồi tự lưu.',true);return clear()}
+  handleEl?.closest('td')?.classList.remove('sheet-error');
+ }
+ setSheetSaveState('◌ Đang lưu...','saving');
+ try{await api('/api/data/partners',{method:'POST',body:JSON.stringify({data})});state.partners=[];setSheetSaveState('✓ Đã lưu','saved');toast('✓ Đã thêm đối tác mới');await listing()}
+ catch(err){clear();setSheetSaveState('⚠ Lỗi lưu','error');toast(err.message,true)}
 }
 function bookingEditableCell(key,r){
  const type=bookingInlineSpecs[key];if(!type)return rowValue('bookings',key,r);
