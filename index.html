@@ -619,6 +619,8 @@ window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-'
 .partner-sheet td.fmt-cell-td .fmt-overlay{position:absolute;inset:0;display:flex;align-items:center;padding:0 8px;pointer-events:none;font-size:13px;font-weight:500;color:#141414}
 .partner-sheet td.fmt-cell-td.editing .fmt-overlay{display:none}
 .partner-sheet td.fmt-cell-td .fmt-overlay .muted{color:#9a8a93}
+.partner-sheet td.fmt-cell-td .sheet-entry::placeholder{color:#b7a9b1;opacity:1}
+.partner-sheet td.fmt-cell-td.editing .sheet-entry::placeholder{color:#b7a9b1}
 .partner-sheet td .cell-popedit{display:flex;align-items:center;width:100%;height:100%;min-height:40px;background:transparent;border:none;text-align:left;padding:0 8px;cursor:pointer;font:500 13px Arial,'Segoe UI',sans-serif;color:#141414;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .partner-sheet td .cell-popedit span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .partner-sheet td .cell-popedit:hover{background:#faf6f2}
@@ -1132,7 +1134,7 @@ function partnerSheetCell(r,s,isNew=false){let [key,title,kind]=s;
  const val=r[key]??(isNew?(defaults.partners[key]??''):'');
  if(!isNew&&(key==='owner'||key==='notes'))return `<td data-col="${esc(key)}"><div class="popedit-wrap" style="width:${(s[3]||180)-14}px"><button type="button" class="cell-popedit" data-key="${esc(key)}" data-original="${esc(val)}" title="Bấm để xem/sửa đầy đủ">${val?`<span>${esc(val)}</span>`:'<span class="muted">—</span>'}</button></div></td>`;
  const inp=inputFor(key,kind,val,s[4]||[],isNew);
- if(key==='followers'||key==='commission'){const ff=key==='followers'?fmtFollowers(val):fmtPct(val);const ov=ff!==''?esc(ff):`<span class="muted">${isNew?'Nhập dữ liệu…':'—'}</span>`;return `<td data-col="${esc(key)}" class="fmt-cell-td">${inp}<span class="fmt-overlay">${ov}</span></td>`;}
+ if(key==='followers'||key==='commission'){const ff=key==='followers'?fmtFollowers(val):fmtPct(val);const ov=ff!==''?esc(ff):'';return `<td data-col="${esc(key)}" class="fmt-cell-td">${inp}<span class="fmt-overlay">${ov}</span></td>`;}
  return `<td data-col="${esc(key)}">${inp}</td>`;
 }
 function blankPartnerRow(){return `<tr class="sheet-new-row" data-new="true"><td class="sheet-index"><span class="new-row-icon">＋</span></td>${sheetSpecs.map(s=>partnerSheetCell({},s,true)).join('')}<td class="sheet-row-actions"><button class="sheet-save-new" title="Lưu KOC mới">✓ Lưu dòng</button></td></tr>`}
@@ -1174,7 +1176,7 @@ function bindPartnerSheetRow(tr){
  $$('.sheet-entry',tr).forEach(el=>{
    el.addEventListener('focus',()=>el.closest('td')?.classList.add('editing'));
    el.addEventListener('blur',()=>{el.closest('td')?.classList.remove('editing');if(!isNew)savePartnerCell(el,id)});
-   if(el.dataset.key==='followers'||el.dataset.key==='commission')el.addEventListener('blur',()=>{const ov=el.closest('td')?.querySelector('.fmt-overlay');if(!ov)return;const ff=el.dataset.key==='followers'?fmtFollowers(el.value):fmtPct(el.value);ov.innerHTML=ff!==''?esc(ff):`<span class="muted">${isNew?'Nhập dữ liệu…':'—'}</span>`});
+   if(el.dataset.key==='followers'||el.dataset.key==='commission')el.addEventListener('blur',()=>{const ov=el.closest('td')?.querySelector('.fmt-overlay');if(!ov)return;const ff=el.dataset.key==='followers'?fmtFollowers(el.value):fmtPct(el.value);ov.innerHTML=ff!==''?esc(ff):''});
    if(el.tagName==='SELECT')el.addEventListener('change',()=>{if(!isNew)savePartnerCell(el,id)});
    el.addEventListener('keydown',ev=>{
      if(ev.key==='Escape'){el.value=el.dataset.original||'';el.blur();ev.preventDefault();return}
