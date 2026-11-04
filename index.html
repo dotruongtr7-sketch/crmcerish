@@ -271,6 +271,13 @@ body,button,input,select,textarea{font-family:Arial,'Segoe UI',sans-serif!import
 .group-choice:hover{background:#fff5f7;border-color:#d8a6b5}
 .group-choice:has(input:checked){border-color:#8A1538;background:#fff3f6}
 .group-choice input{accent-color:#8A1538;width:16px;height:16px}
+.group-choice-row{display:flex;align-items:stretch;gap:6px}
+.group-choice-row .group-choice{flex:1;min-width:0}
+.group-choice-row .group-choice>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.group-choice-actions{display:flex;flex-direction:column;gap:3px;justify-content:center}
+.group-choice-actions button{border:1px solid #e5deda;background:#fff;border-radius:6px;width:27px;height:19px;line-height:1;font-size:12px;cursor:pointer;color:#6d425b;padding:0}
+.group-choice-actions .gc-del{color:#a01b36;border-color:#ebcad0;font-size:15px}
+.group-choice-actions button:hover{background:#faf0f3}
 .group-popup-footer{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}
 .group-add-line{display:flex;gap:8px;margin-bottom:14px}
 .group-add-line input{height:39px;padding:0 12px;border:1px solid #cfc7c2;border-radius:7px;flex:1;min-width:0;color:#161416}
@@ -1044,12 +1051,24 @@ function showGroupDialog(inner,title){
 async function openGroupsEditor(btn,id,isNew){
   const field=btn.dataset.field||'live_groups',isVideo=field==='video_groups';
   const selected=new Set(splitGroups(btn.dataset.groups));
- const d=showGroupDialog(`<p class="group-popup-desc">Một KOC có thể chuyên ${isVideo?'Video':'Live'} nhiều nhóm sản phẩm. Chọn các nhóm phù hợp rồi bấm <b>Lưu lựa chọn</b>.</p><div class="group-checkbox-grid">${productGroups.map(g=>`<label class="group-choice"><input type="checkbox" value="${esc(g)}" ${selected.has(g)?'checked':''}><span>${esc(g)}</span></label>`).join('')}</div><div class="group-popup-footer"><button class="outline" id="gCancel">Hủy</button><button class="primary" id="gConfirm">✓ Lưu lựa chọn</button></div>`, 'Nhóm sản phẩm chuyên '+(isVideo?'Video':'Live'));
+ const d=showGroupDialog(`<p class="group-popup-desc">Một KOC có thể chuyên ${isVideo?'Video':'Live'} nhiều nhóm sản phẩm. Tick chọn nhóm rồi bấm <b>Lưu lựa chọn</b>. Dùng <b>✎</b> để đổi tên, <b>×</b> để xóa nhóm.</p><div class="group-checkbox-grid" id="gGrid"></div><div class="group-add-line"><input id="gNewGroup" placeholder="Thêm nhóm mới: Chân váy, Áo khoác..." maxlength="50"><button class="secondary" id="gAddGroup">+ Thêm nhóm</button></div><div class="group-popup-footer"><button class="outline" id="gCancel">Hủy</button><button class="primary" id="gConfirm">✓ Lưu lựa chọn</button></div>`, 'Nhóm sản phẩm chuyên '+(isVideo?'Video':'Live'));
+ const grid=d.querySelector('#gGrid');
+ const syncSel=()=>grid.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked?selected.add(c.value):selected.delete(c.value));
+ const syncSheetButtons=(old,next)=>{document.querySelectorAll('.partner-sheet .group-editor-btn').forEach(gb=>{const vals=splitGroups(gb.dataset.groups);if(!vals.includes(old))return;const after=(next?[...new Set(vals.map(t=>t===old?next:t))]:vals.filter(t=>t!==old)).join('|');gb.dataset.groups=after;const lbl=gb.querySelector('.gmerge-lbl');gb.innerHTML=(lbl?lbl.outerHTML:'')+displayProductGroups(after,gb.dataset.field)})};
+ const draw=()=>{
+  grid.innerHTML=productGroups.map(g=>`<div class="group-choice-row"><label class="group-choice"><input type="checkbox" value="${esc(g)}" ${selected.has(g)?'checked':''}><span>${esc(g)}</span></label><span class="group-choice-actions"><button type="button" class="gc-edit" data-g="${esc(g)}" title="Đổi tên nhóm">✎</button><button type="button" class="gc-del" data-g="${esc(g)}" title="Xóa nhóm">×</button></span></div>`).join('');
+  grid.querySelectorAll('.gc-edit').forEach(b=>b.onclick=async()=>{syncSel();const old=b.dataset.g,next=prompt('Đổi tên nhóm sản phẩm:',old)?.trim();if(!next||next===old)return;if(productGroups.some(v=>v.toLowerCase()===next.toLowerCase())){toast('Nhóm này đã tồn tại',true);return}try{await modifyCatalogReferences(old,next);const i=productGroups.indexOf(old);if(i>=0)productGroups[i]=next;saveProductGroups();if(selected.has(old)){selected.delete(old);selected.add(next)}if(state.groupFilter===old)state.groupFilter=next;if(state.videoGroupFilter===old)state.videoGroupFilter=next;if(state.productGroupFilter===old)state.productGroupFilter=next;syncSheetButtons(old,next);draw();toast('Đã đổi tên nhóm')}catch(err){toast(err.message,true)}});
+  grid.querySelectorAll('.gc-del').forEach(b=>b.onclick=async()=>{syncSel();const old=b.dataset.g;if(!confirm('Xóa nhóm "'+old+'" khỏi danh mục và khỏi những KOC đang gắn nhóm này?'))return;try{await modifyCatalogReferences(old,'');const i=productGroups.indexOf(old);if(i>=0)productGroups.splice(i,1);saveProductGroups();selected.delete(old);if(state.groupFilter===old)state.groupFilter='';if(state.videoGroupFilter===old)state.videoGroupFilter='';if(state.productGroupFilter===old)state.productGroupFilter='';syncSheetButtons(old,'');draw();toast('Đã xóa nhóm')}catch(err){toast(err.message,true)}});
+ };
+ draw();
+ const addGroup=()=>{const inp=d.querySelector('#gNewGroup'),v=inp.value.trim();if(!v)return;if(v.includes('|'))return toast('Tên nhóm không được chứa ký tự |',true);if(productGroups.some(x=>x.toLowerCase()===v.toLowerCase()))return toast('Nhóm đã tồn tại',true);syncSel();productGroups.push(v);saveProductGroups();selected.add(v);inp.value='';draw();toast('Đã thêm nhóm '+v)};
+ d.querySelector('#gAddGroup').onclick=addGroup;d.querySelector('#gNewGroup').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addGroup()}};
  d.querySelector('#gCancel').onclick=()=>d.remove();
  d.querySelector('#gConfirm').onclick=async()=>{
-   const vals=[...d.querySelectorAll('input:checked')].map(x=>x.value),value=vals.join('|');
+   syncSel();
+   const vals=[...grid.querySelectorAll('input:checked')].map(x=>x.value),value=vals.join('|');
    if(!isNew){try{await api('/api/data/partners/'+id,{method:'PATCH',body:JSON.stringify({data:{[field]:value}})});state.partners=[];const row=state.rows.find(r=>String(r.id)===String(id));if(row)row[field]=value;}catch(err){toast('Không thể lưu: '+err.message,true);return}}
-   btn.dataset.groups=value;btn.innerHTML=displayProductGroups(value,field);d.remove();setSheetSaveState('✓ Đã lưu','saved');toast(isNew?'Đã chọn nhóm (lưu dòng để hoàn tất)':'Đã cập nhật nhóm sản phẩm');
+   const lbl=btn.querySelector('.gmerge-lbl');btn.dataset.groups=value;btn.innerHTML=(lbl?lbl.outerHTML:'')+displayProductGroups(value,field);d.remove();setSheetSaveState('✓ Đã lưu','saved');toast(isNew?'Đã chọn nhóm (tự lưu khi rời dòng)':'Đã cập nhật nhóm sản phẩm');
    if(!isNew&&state.productGroupFilter&&(field==='live_groups'||field==='video_groups'))listing();
  };
 }
