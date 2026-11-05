@@ -17,7 +17,7 @@ var TABLES={
  campaigns:["name","product","sku","product_id","target_koc","target_kol","target_videos","target_lives","start_date","end_date","owner","status","notes"],
  samples:["partner_id","product","product_id","quantity","sent_date","received_date","tracking_code","status","owner","notes"],
  videos:["booking_id","partner_id","title","platform","url","posted_date","views","orders","gmv","status","notes"],
- lives:["partner_id","title","session_date","duration_minutes","views","orders","gmv","commission","status","notes"],
+ lives:["partner_id","host","session_type","platform","time_slot","title","session_date","duration_minutes","products","views","peak_viewers","orders","units","gmv","commission","status","notes"],
  tasks:["partner_id","title","due_date","priority","status","owner","notes"],
  customers:["name","phone","channel","orders","spent","segment","owner","notes"]
 };
@@ -32,7 +32,7 @@ var STATUS={
  tasks:["Cần làm","Đang làm","Hoàn thành","Quá hạn"]
 };
 var DATA_TABLES=['partners','bookings','products','campaigns','samples','videos','lives','tasks','customers','audit_logs'];
-var NUMERIC={followers:1,quantity:1,views:1,orders:1,duration_minutes:1,target_koc:1,target_kol:1,target_videos:1,target_lives:1};
+var NUMERIC={followers:1,quantity:1,views:1,orders:1,duration_minutes:1,target_koc:1,target_kol:1,target_videos:1,target_lives:1,peak_viewers:1,units:1};
 var MONEY={booking_fee:1,commission:1,gmv:1,spent:1};
 var IDFIELDS={id:1,partner_id:1,campaign_id:1,product_id:1,booking_id:1,user_id:1,entity_id:1,active:1};
 var SEARCH_SKIP={partner_id:1,followers:1,commission:1,booking_fee:1,quantity:1,views:1,orders:1,gmv:1,duration_minutes:1,spent:1};
@@ -123,7 +123,7 @@ function groupHas(val,name){return ('|'+(val||'')+'|').indexOf('|'+name+'|')>=0}
 function validate(table,values,update){
  if(!TABLES[table])throw new HttpError(404,'Không tìm thấy phân hệ');
  if(!values||typeof values!=='object')throw new HttpError(422,'Dữ liệu không hợp lệ');
- var required={partners:'name',bookings:'partner_id',campaigns:'name',products:'name',samples:'product',videos:'title',lives:'title',tasks:'title',customers:'name'}[table];
+ var required={partners:'name',bookings:'partner_id',campaigns:'name',products:'name',samples:'product',videos:'title',lives:'session_date',tasks:'title',customers:'name'}[table];
  if(!update&&!String(values[required]==null?'':values[required]).trim())throw new HttpError(422,'Thiếu trường bắt buộc: '+required);
  if((required in values)&&!String(values[required]==null?'':values[required]).trim())throw new HttpError(422,'Tên hoặc tiêu đề không được để trống');
  var out={};
@@ -387,7 +387,7 @@ async function handle(path,opts){
     if(table==='bookings'&&!Number(data2.campaign_id||0))throw new HttpError(422,'Booking mới phải thuộc một chiến dịch sản phẩm');
     checkCampaign(table,data2);
     if(table==='products'&&!String(data2.booking_owner||'').trim())throw new HttpError(422,'Mỗi sản phẩm phải có một nhân sự phụ trách booking');
-    if(TABLES[table].indexOf('partner_id')>=0&&table!=='tasks'&&!data2.partner_id)throw new HttpError(422,'Vui lòng chọn đối tác');
+    if(TABLES[table].indexOf('partner_id')>=0&&table!=='tasks'&&table!=='lives'&&!data2.partner_id)throw new HttpError(422,'Vui lòng chọn đối tác');
     if(table==='samples'&&data2.status==='Đã nhận'&&!data2.received_date)data2.received_date=today();
     var stamp2=now();
     var rec={id:newId()};
