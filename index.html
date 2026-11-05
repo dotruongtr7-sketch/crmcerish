@@ -616,7 +616,7 @@ body{font-family:Arial,'Segoe UI',sans-serif;color:#1d1c1f;background:#f9f8f8;fo
 window.CERISH_SUPABASE_URL='https://miszniovmycefxtpssyn.supabase.co';
 window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-';
 </script>
-<script src="supabase-api.js?v=5"></script>
+<script src="supabase-api.js?v=6"></script>
 <style>
 /* Bảng KOC gọn: giảm đệm ô, cỡ chữ và cột cố định để đỡ cuộn ngang */
 .partner-sheet{min-width:0;font-size:12px}
@@ -905,29 +905,7 @@ async function dailyReport(){
  const dp=$('#reportDatePick');if(dp)dp.onchange=()=>{state._reportDate=dp.value;dailyReport()};
 }
 async function liveReport(){
- let lives=[],partners=[];
- try{[lives,partners]=await Promise.all([getAll('lives'),getAll('partners')])}catch(e){}
- const done=lives.filter(l=>l.status==='Đã diễn ra');
- const sum=(arr,f)=>arr.reduce((a,x)=>a+Number(x[f]||0),0);
- const totOrders=sum(done,'orders'),totGmv=sum(done,'gmv'),totViews=sum(done,'views'),totUnits=sum(done,'units');
- const avgGmv=done.length?totGmv/done.length:0;
- const conv=totViews?totOrders/totViews*100:0;
- const partnerName=id=>partners.find(x=>Number(x.id)===Number(id))?.name||'';
- const hostMap=new Map();
- done.forEach(l=>{const h=(l.host||'').trim()||'(Chưa ghi người live)';const m=hostMap.get(h)||{host:h,sessions:0,orders:0,gmv:0,views:0};m.sessions++;m.orders+=Number(l.orders||0);m.gmv+=Number(l.gmv||0);m.views+=Number(l.views||0);hostMap.set(h,m)});
- const hosts=[...hostMap.values()].sort((a,b)=>b.gmv-a.gmv||b.orders-a.orders);
- const medal=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
- const hostRows=hosts.map((r,i)=>`<tr><td>${medal(i)} ${esc(r.host)}</td><td>${num(r.sessions)}</td><td>${num(r.orders)}</td><td>${money(r.gmv)}</td><td>${money(r.sessions?r.gmv/r.sessions:0)}</td></tr>`).join('')||'<tr><td colspan="5" class="muted">Chưa có phiên đã diễn ra để xếp hạng.</td></tr>';
- const sorted=lives.slice().sort((a,b)=>String(b.session_date||'').localeCompare(String(a.session_date||''))||Number(b.id)-Number(a.id));
- const stTag=s=>`<span class="tag ${s==='Đã diễn ra'?'ok':''}">${esc(s||'—')}</span>`;
- const tyTag=l=>l.session_type==='KOC'?`<span class="tag">KOC${l.partner_id?' · '+esc(partnerName(l.partner_id)):''}</span>`:'<span class="tag ok">Nội bộ</span>';
- const rowsHtml=sorted.map(l=>`<tr data-open="${l.id}"><td>${shortDate(l.session_date)}</td><td>${esc(l.host||'—')}</td><td>${tyTag(l)}</td><td>${esc(l.platform||'—')}${l.time_slot?' · '+esc(l.time_slot):''}</td><td>${num(l.views||0)}</td><td>${num(l.orders||0)}</td><td>${money(l.gmv||0)}</td><td>${stTag(l.status)}</td><td class="more-arrow">›</td></tr>`).join('')||'<tr><td colspan="9" class="muted">Chưa có phiên live nào. Bấm “＋ Thêm phiên live” để báo cáo.</td></tr>';
- $('#mainContent').innerHTML=title('Vận hành / CERISH','Livestream','Nhân sự live điền báo cáo từng phiên (nội bộ & KOC) để quản lý thấy hiệu quả và điều chỉnh kịp thời.',`<button class="primary" id="addLive">＋ Thêm phiên live</button>`)+
-  `<div class="summary-grid">${card('Phiên đã live',num(done.length),'Tổng phiên đã diễn ra','◉')}${card('Tổng đơn',num(totOrders),num(totUnits)+' sản phẩm bán ra','▣')}${card('Tổng GMV',money(totGmv),'Doanh thu các phiên','₫')}${card('GMV / phiên',money(avgGmv),'Trung bình mỗi phiên','∅')}${card('Tỷ lệ chốt',conv.toFixed(2)+'%','Đơn ÷ lượt xem','%')}</div>`+
-  `<section class="panel"><div class="panel-head"><div><h3>Xếp hạng người live</h3><p>Theo GMV mang về · chỉ tính phiên đã diễn ra</p></div></div><div class="table-scroll"><table class="dr-table"><thead><tr><th>NGƯỜI LIVE</th><th>SỐ PHIÊN</th><th>ĐƠN</th><th>GMV</th><th>GMV/PHIÊN</th></tr></thead><tbody>${hostRows}</tbody></table></div></section>`+
-  `<section class="panel" style="margin-top:18px"><div class="panel-head"><div><h3>Các phiên live</h3><p>${num(lives.length)} phiên · bấm 1 dòng để xem / sửa / xóa</p></div></div><div class="table-scroll"><table class="dr-table"><thead><tr><th>NGÀY</th><th>NGƯỜI LIVE</th><th>LOẠI</th><th>NỀN TẢNG · GIỜ</th><th>LƯỢT XEM</th><th>ĐƠN</th><th>GMV</th><th>TRẠNG THÁI</th><th></th></tr></thead><tbody>${rowsHtml}</tbody></table></div></section>`;
- $('#addLive').onclick=()=>editModal('lives');
- $$('#mainContent [data-open]').forEach(el=>el.onclick=e=>{if(e.target.closest('input,select,textarea,button,a'))return;detail('lives',el.dataset.open)});
+ $('#mainContent').innerHTML=`<iframe src="live/index.html?v=6" title="Báo cáo Livestream CERISH" style="width:100%;height:calc(100vh - 56px);border:0;border-radius:12px;background:#f7f7f8;display:block"></iframe>`;
 }
 async function loadCampaigns(){state.campaigns=await getAll('campaigns');return state.campaigns}
 const campaignDetails = {name:'Tên chiến dịch',product_id:'Sản phẩm',product:'Tên sản phẩm',sku:'Mã sản phẩm',target_koc:'Mục tiêu KOC',target_kol:'Mục tiêu KOL',target_videos:'Mục tiêu Video',target_lives:'Mục tiêu Live',start_date:'Bắt đầu',end_date:'Kết thúc',owner:'Phụ trách',status:'Trạng thái',notes:'Ghi chú'};

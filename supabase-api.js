@@ -263,6 +263,40 @@ async function handle(path,opts){
  var body=null;
  if(opts.body){try{body=JSON.parse(opts.body)}catch(e){throw new HttpError(422,'Dữ liệu không hợp lệ')}}
 
+ // ===== Module Báo cáo Livestream (app riêng) — lưu raw JSON vào bảng 'lives' =====
+ if(parts[1]==='live'){
+  if(!getToken())throw new HttpError(401,'Vui lòng đăng nhập');
+  var LIVE_SET_ID=1;
+  var dumpLives=async function(){var d=await rpc('cerish_dump',{p_token:getToken()});if(d&&d.ok===false)throw new HttpError(d.code||401,d.error||'Không tải được dữ liệu');return ((d.tables||{}).lives)||[]};
+  if(parts[2]==='sessions'&&!parts[3]&&method==='GET'){
+   var rows=await dumpLives();
+   return rows.filter(function(r){return r&&r._kind!=='settings'&&Number(r.id)!==LIVE_SET_ID});
+  }
+  if(parts[2]==='sessions'&&parts[3]&&method==='PUT'){
+   var sid=Number(parts[3]);if(!sid)throw new HttpError(422,'ID phiên không hợp lệ');
+   var rec=Object.assign({},body||{});rec.id=sid;delete rec._kind;rec.session_date=rec.date||rec.session_date||'';
+   var put=await rpc('cerish_put',{p_token:getToken(),p_table:'lives',p_record:rec});
+   if(put&&put.ok===false)throw new HttpError(put.code||422,put.error||'Không lưu được phiên');
+   return {ok:true,id:sid};
+  }
+  if(parts[2]==='sessions'&&parts[3]&&method==='DELETE'){
+   var del=await rpc('cerish_del',{p_token:getToken(),p_table:'lives',p_id:Number(parts[3])});
+   if(del&&del.ok===false)throw new HttpError(del.code||403,del.error||'Không xóa được phiên');
+   return {ok:true};
+  }
+  if(parts[2]==='settings'&&method==='GET'){
+   var all=await dumpLives();var st=all.find(function(r){return r&&(r._kind==='settings'||Number(r.id)===LIVE_SET_ID)});
+   return st?{margin:Number(st.margin||0),orderRate:st.orderRate!=null?Number(st.orderRate):0.8,roas:st.roas!=null?Number(st.roas):2}:{margin:0,orderRate:0.8,roas:2};
+  }
+  if(parts[2]==='settings'&&method==='PUT'){
+   var srec={id:LIVE_SET_ID,_kind:'settings',margin:Number((body||{}).margin||0),orderRate:Number((body||{}).orderRate||0),roas:Number((body||{}).roas||0)};
+   var sput=await rpc('cerish_put',{p_token:getToken(),p_table:'lives',p_record:srec});
+   if(sput&&sput.ok===false)throw new HttpError(sput.code||422,sput.error||'Không lưu được ngưỡng');
+   return {ok:true};
+  }
+  throw new HttpError(404,'Route live không hợp lệ');
+ }
+
  if(parts[1]==='login'&&method==='POST'){
   var out=await rpc('cerish_login',{p_email:String((body&&body.email)||'').trim(),p_password:String((body&&body.password)||'')});
   setToken(out.token);sessionUser=out.user;
