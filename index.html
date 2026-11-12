@@ -586,6 +586,15 @@ button.primary,a.primary,.btn.primary{background:linear-gradient(180deg,#a11a4d,
 input,select,textarea{border-radius:12px!important}
 .page-head h1{font-size:30px!important;letter-spacing:-.4px!important}
 .tag,.pill,.badge{border-radius:999px!important}
+.page-head{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:20px!important;background:rgba(255,250,246,.92)!important;border:1px solid #DCC9BB!important;border-radius:22px!important;padding:20px 24px!important;box-shadow:0 10px 30px rgba(75,35,49,.05)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ph-crumb{font-size:11px;letter-spacing:.14em;color:#8a7568;font-weight:700;margin-bottom:9px;text-transform:uppercase}
+.ph-crumb span{color:#951847}
+.page-head h1{font-size:30px!important;margin:0 0 7px!important;letter-spacing:-.4px!important;line-height:1.12}
+.ph-desc{margin:0;color:#7a6768;font-size:13.5px;line-height:1.5;max-width:780px}
+.page-actions{flex-shrink:0}
+input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!important}
+.panel,.table-panel{background:#F7F1EB!important}
+.kpi-card{background:linear-gradient(180deg,#FFFDFB,#F7F1EB)!important}
 </style>
 </head>
 <body>
@@ -763,7 +772,9 @@ function setNavigation(p){$$('[data-page]').forEach(btn=>btn.classList.toggle('a
 async function navigate(page){if(page==='bookings')page='campaigns';if(!LABELS[page])return;state.page=page;state.search='';state.filter='';state.groupFilter='';state.videoGroupFilter='';state.productGroupFilter='';state.activityFilter='';state.pageNum=1;setNavigation(page);$('#mainContent').innerHTML='<div class="loading">Đang tải dữ liệu...</div>';try{if(page==='dashboard')return await dashboard();if(page==='campaigns')return await renderCampaigns();if(page==='products')return await renderProducts();if(page==='reports')return await reports();if(page==='staff')return await staffProfiles();if(page==='dailyreport')return await dailyReport();if(page==='lives')return await liveReport();if(page==='settings')return await settings();return await listing()}catch(e){$('#mainContent').innerHTML=`<div class="panel"><p>${esc(e.message)}</p><button class="outline" onclick="navigate('${page}')">Tải lại</button></div>`}}
 function title(eyebrow,name,description,actions=''){
  const label = name==='Danh sách KOC/KOL'?'Đối tác KOC/KOL':name==='Chào mừng trở lại 👋'?'Tổng quan':name==='Cài đặt CRM'?'Cài đặt':name;
- return `<div class="page-head"><h1>${esc(label)}</h1><div class="page-actions">${actions}</div></div>`;
+ const V2D={dashboard:'Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',partners:'Lọc theo trạng thái hợp tác, hình thức nội dung, nhóm sản phẩm và hiệu quả chuyển đổi.',campaigns:'Danh sách chiến dịch bên trái, chi tiết tập trung bên phải — nhìn nhanh, quyết định nhanh.',products:'Theo dõi sản phẩm, người phụ trách, booking liên quan và hiệu quả nội dung.',lives:'Nhân sự nộp báo cáo phiên live, theo dõi hiệu suất theo kênh, theo người và theo ca.',tasks:'Giao việc, theo dõi deadline, ưu tiên và tình trạng xử lý của từng bộ phận.',customers:'Tổng hợp khách hàng, tệp khách mua lại và ghi chú chăm sóc.',reports:'Báo cáo đa chiều theo nội dung, đối tác, chiến dịch, livestream và nhân sự.',staff:'Hồ sơ, KPI và tải công việc của từng nhân sự trong CERISH.',dailyreport:'Điểm lại những việc đã làm, số liệu trong ngày, vướng mắc và hướng xử lý tiếp theo.',settings:'Quản trị tài khoản, phân quyền, cấu hình workspace và các quy tắc vận hành chung.'};
+ const d=description||V2D[state.page]||'';
+ return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(label)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
 }
 function card(label,value,foot,icon){return `<div class="kpi-card"><div class="kpi-top"><span>${esc(label)}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value">${value}</div><div class="kpi-foot">${foot}</div></div>`}
 async function dashboard(){const x=await api('/api/analytics/summary');$('#taskPill').textContent=x.tasks;$('#taskPill').classList.toggle('hidden',!x.tasks);
