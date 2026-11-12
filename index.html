@@ -968,6 +968,7 @@ function refreshCampaignTable(){
  });
 }
 async function renderCampaigns(){
+ $('#mainContent').innerHTML=`<iframe src="booking/index.html?v=1" title="Chiến dịch booking" style="width:100%;height:calc(100vh - 56px);border:0;border-radius:12px;background:#faf7f6;display:block"></iframe>`;return;
  v12VideoCache=await getAll('videos');
  await loadCampaigns();await loadPartners();campaignBookings=await getAll('bookings');
  const cs=state.campaigns;

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CERISH · Chiến dịch Booking — Frontend V2</title>
+<link rel="stylesheet" href="styles.css">
+<script>window.CERISH_SUPABASE_URL='https://miszniovmycefxtpssyn.supabase.co';window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-';</script>
+<script src="../supabase-api.js?v=6"></script>
+<style>.app-shell .sidebar,.main-shell .topbar{display:none!important}</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-zone">
+      <div class="brand-script">Cerish <span class="sparkle">✦</span></div>
+      <div class="brand-sub">WEAR YOUR SOFT POWER</div>
+      <div class="holding">1999 Holdings</div>
+    </div>
+    <div class="side-label">KHÔNG GIAN LÀM VIỆC</div>
+    <nav class="side-menu" aria-label="Điều hướng CERISH">
+      <a href="#" data-nav="Tổng quan"><span class="nav-ico">▣</span>Tổng quan</a>
+      <a href="#" data-nav="Đối tác KOC/KOL"><span class="nav-ico">♧</span>Đối tác KOC/KOL</a>
+      <a href="#" class="active" aria-current="page"><span class="nav-ico">◇</span>Chiến dịch booking</a>
+      <a href="#" data-nav="Sản phẩm"><span class="nav-ico">▧</span>Sản phẩm</a>
+      <a href="#" data-nav="Livestream"><span class="nav-ico">◉</span>Livestream</a>
+      <a href="#" data-nav="Công việc"><span class="nav-ico">☷</span>Công việc</a>
+      <div class="side-label secondary-title">KINH DOANH & BÁO CÁO</div>
+      <a href="#" data-nav="Khách hàng"><span class="nav-ico">♙</span>Khách hàng</a>
+      <a href="#" data-nav="Báo cáo hiệu quả"><span class="nav-ico">▥</span>Báo cáo hiệu quả</a>
+      <a href="#" data-nav="Nhân sự"><span class="nav-ico">♙</span>Hồ sơ nhân sự</a>
+      <a href="#" data-nav="Báo cáo hằng ngày"><span class="nav-ico">▦</span>Báo cáo hằng ngày</a>
+      <a href="#" data-nav="Cài đặt"><span class="nav-ico">⚙</span>Cài đặt</a>
+    </nav>
+    <div class="side-user"><div class="user-avatar">C</div><div class="user-meta"><strong>1999 Holdings</strong><small>Quản trị CERISH</small></div><span class="user-exit">↗</span></div>
+  </aside>
+  <div class="main-shell">
+    <header class="topbar">
+      <div class="topbrand"><button id="mobileMenu" aria-label="Mở menu" class="icon-btn mobile-menu">☰</button><span class="top-dot"></span><strong>CERISH <span class="top-mut">CRM</span></strong><span class="top-divider">/</span><span>Chiến dịch booking</span></div>
+      <div class="topright"><span class="preview-hint">Giao diện mẫu · Chưa kết nối dữ liệu thật</span><span class="top-ring">◌</span><div class="user-avatar sm">C</div></div>
+    </header>
+    <main id="booking-root" class="page-content" aria-live="polite"></main>
+  </div>
+</div>
+<div id="ui-overlay"></div><div id="toast-region" role="status" aria-live="polite"></div>
+<script src="api-adapter.js"></script>
+<script src="booking.js"></script>
+<script>window.CERISH_BOOKING.mount({ root:'#booking-root', adapter:window.CERISH_BOOKING_API, demo:false });</script>
+</body>
+</html>
