@@ -814,7 +814,8 @@ function title(eyebrow,name,description,actions=''){
  const label = name==='Danh sách KOC/KOL'?'Đối tác KOC/KOL':name==='Chào mừng trở lại 👋'?'Tổng quan':name==='Cài đặt CRM'?'Cài đặt':name;
  const V2D={dashboard:'Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',partners:'Lọc theo trạng thái hợp tác, hình thức nội dung, nhóm sản phẩm và hiệu quả chuyển đổi.',campaigns:'Danh sách chiến dịch bên trái, chi tiết tập trung bên phải — nhìn nhanh, quyết định nhanh.',products:'Theo dõi sản phẩm, người phụ trách, booking liên quan và hiệu quả nội dung.',lives:'Nhân sự nộp báo cáo phiên live, theo dõi hiệu suất theo kênh, theo người và theo ca.',tasks:'Giao việc, theo dõi deadline, ưu tiên và tình trạng xử lý của từng bộ phận.',customers:'Tổng hợp khách hàng, tệp khách mua lại và ghi chú chăm sóc.',reports:'Báo cáo đa chiều theo nội dung, đối tác, chiến dịch, livestream và nhân sự.',staff:'Hồ sơ, KPI và tải công việc của từng nhân sự trong CERISH.',dailyreport:'Điểm lại những việc đã làm, số liệu trong ngày, vướng mắc và hướng xử lý tiếp theo.',settings:'Quản trị tài khoản, phân quyền, cấu hình workspace và các quy tắc vận hành chung.'};
  const d=description||V2D[state.page]||'';
- return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(label)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
+ const crumb = state.page==='dashboard'?'Tổng quan':label;
+ return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(crumb)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
 }
 function card(label,value,foot,icon){return `<div class="kpi-card"><div class="kpi-top"><span>${esc(label)}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value">${value}</div><div class="kpi-foot">${foot}</div></div>`}
 async function dashboard(){
@@ -845,7 +846,9 @@ async function dashboard(){
  const fTop=Math.max(1,funnel[0][1]);
  const mix=[['Video đã đăng',videoPosted,'#951847'],['Livestream',L.length,'#d88faf'],['Video chờ đăng',V.filter(v=>v.status!=='Đã đăng').length,'#f0b6c5'],['Booking chưa có nội dung',B.filter(b=>b.video_status==='Chưa đăng').length,'#d9d1ca']].filter(m=>m[1]>0);
  const mixTotal=mix.reduce((a,m)=>a+m[1],0);
- const hm=new Map();L.forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=Number(l.duration_minutes||0);m.n++;hm.set(h,m)});
+ const toMin=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(t||'').trim());return m?(+m[1])*60+(+m[2]):null};
+ const durOf=l=>{if(Number(l.duration_minutes)>0)return Number(l.duration_minutes);const s=toMin(l.start),e=toMin(l.end);if(s==null||e==null)return 0;let d=e-s;if(d<0)d+=1440;return d};
+ const hm=new Map();L.forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=durOf(l);m.n++;hm.set(h,m)});
  const hosts=[...hm.values()].map(m=>({...m,ph:m.mins>0?m.gmv/(m.mins/60):0})).sort((a,b)=>b.ph-a.ph).slice(0,4);
  const hostMax=Math.max(1,...hosts.map(h=>h.ph));
  const livesDraft=L.filter(l=>!l.status||l.status==='Nháp').length;
