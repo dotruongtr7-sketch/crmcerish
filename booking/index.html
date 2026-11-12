@@ -45,6 +45,6 @@
 <div id="ui-overlay"></div><div id="toast-region" role="status" aria-live="polite"></div>
 <script src="api-adapter.js"></script>
 <script src="booking.js"></script>
-<script>window.CERISH_BOOKING.mount({ root:'#booking-root', adapter:window.CERISH_BOOKING_API, demo:false });</script>
+<script>(async()=>{try{await fetch('/api/me',{credentials:'same-origin'})}catch(e){}window.CERISH_BOOKING.mount({ root:'#booking-root', adapter:window.CERISH_BOOKING_API, demo:false });})();</script>
 </body>
 </html>
