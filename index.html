@@ -905,7 +905,7 @@ async function dailyReport(){
  const dp=$('#reportDatePick');if(dp)dp.onchange=()=>{state._reportDate=dp.value;dailyReport()};
 }
 async function liveReport(){
- $('#mainContent').innerHTML=`<iframe src="live/index.html?v=7" title="Báo cáo Livestream CERISH" style="width:100%;height:calc(100vh - 56px);border:0;border-radius:12px;background:#f7f7f8;display:block"></iframe>`;
+ $('#mainContent').innerHTML=`<iframe src="live/index.html?v=8" title="Báo cáo Livestream CERISH" style="width:100%;height:calc(100vh - 56px);border:0;border-radius:12px;background:#f7f7f8;display:block"></iframe>`;
 }
 async function loadCampaigns(){state.campaigns=await getAll('campaigns');return state.campaigns}
 const campaignDetails = {name:'Tên chiến dịch',product_id:'Sản phẩm',product:'Tên sản phẩm',sku:'Mã sản phẩm',target_koc:'Mục tiêu KOC',target_kol:'Mục tiêu KOL',target_videos:'Mục tiêu Video',target_lives:'Mục tiêu Live',start_date:'Bắt đầu',end_date:'Kết thúc',owner:'Phụ trách',status:'Trạng thái',notes:'Ghi chú'};
