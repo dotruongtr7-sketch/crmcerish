@@ -286,10 +286,10 @@ async function handle(path,opts){
   }
   if(parts[2]==='settings'&&method==='GET'){
    var all=await dumpLives();var st=all.find(function(r){return r&&(r._kind==='settings'||Number(r.id)===LIVE_SET_ID)});
-   return st?{margin:Number(st.margin||0),orderRate:st.orderRate!=null?Number(st.orderRate):0.8,roas:st.roas!=null?Number(st.roas):2}:{margin:0,orderRate:0.8,roas:2};
+   return st?{minOrders:Number(st.minOrders||0),minGmv:Number(st.minGmv||0),maxAdSpend:Number(st.maxAdSpend||0)}:{minOrders:0,minGmv:0,maxAdSpend:0};
   }
   if(parts[2]==='settings'&&method==='PUT'){
-   var srec={id:LIVE_SET_ID,_kind:'settings',margin:Number((body||{}).margin||0),orderRate:Number((body||{}).orderRate||0),roas:Number((body||{}).roas||0)};
+   var srec={id:LIVE_SET_ID,_kind:'settings',minOrders:Number((body||{}).minOrders||0),minGmv:Number((body||{}).minGmv||0),maxAdSpend:Number((body||{}).maxAdSpend||0)};
    var sput=await rpc('cerish_put',{p_token:getToken(),p_table:'lives',p_record:srec});
    if(sput&&sput.ok===false)throw new HttpError(sput.code||422,sput.error||'Không lưu được ngưỡng');
    return {ok:true};
