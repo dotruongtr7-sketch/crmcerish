@@ -635,6 +635,82 @@ input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!impo
 .dash-search input{border:0!important;background:transparent!important;outline:none;width:100%;font-size:13px;height:auto!important}
 .dash-search .dsi{color:#a7918a}
 @media(max-width:1200px){#dash .dashboard-grid,#dash .two-col{grid-template-columns:1fr}#dash .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* ===== Sản phẩm V2 (scoped #prodV2) ===== */
+#prodV2{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+#prodV2 .product-nav{display:flex;gap:8px;margin-bottom:0}
+#prodV2 .product-nav button{height:38px;padding:0 16px;border-radius:12px;border:1px solid #DCC9BB;background:#fff9f5;font-weight:700;color:#7a6768;cursor:pointer}
+#prodV2 .product-nav button.active{background:#f7e8ef;border-color:#ddacc1;color:#951847}
+#prodV2 .panel{background:#f7f1eb!important;border:1px solid #DCC9BB!important;border-radius:22px!important;padding:18px 20px!important;box-shadow:0 10px 30px rgba(75,35,49,.05)!important}
+#prodV2 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+#prodV2 .panel-head h3{margin:0 0 6px;font-size:20px;font-weight:800;color:#261f23}
+#prodV2 .panel-head p{margin:0;color:#7a6768;font-size:13px;max-width:560px}
+#prodV2 .primary-btn{height:42px;padding:0 16px;border-radius:13px;border:none;background:linear-gradient(180deg,#a11a4d,#771338);color:#fff;font-weight:700;box-shadow:0 6px 16px rgba(149,24,71,.2);white-space:nowrap;cursor:pointer}
+#prodV2 .ghost-btn{height:42px;padding:0 14px;border-radius:13px;border:1px solid #DCC9BB;background:#fff9f5;color:#261f23;font-weight:700;white-space:nowrap;cursor:pointer}
+#prodV2 .ghost-btn.p-del{color:#9d1d1d}
+#prodV2 .mini-btn{height:34px;padding:0 12px;border-radius:12px;border:1px solid #DCC9BB;background:#fff9f5;font-weight:700;font-size:12.5px;color:#261f23;white-space:nowrap;cursor:pointer}
+#prodV2 .mini-btn:disabled{opacity:.45;cursor:default}
+#prodV2 .input,#prodV2 .select{height:40px;border-radius:12px;border:1px solid #DCC9BB!important;background:#fff9f5!important;padding:0 12px;color:#261f23}
+#prodV2 .input{min-width:220px}
+#prodV2 .p-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+#prodV2 .p-toolbar-left,#prodV2 .p-toolbar-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#prodV2 .p-count{font-weight:800;color:#7a6768;font-size:13px}
+#prodV2 .p-pager{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#7a6768}
+#prodV2 .badge{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+#prodV2 .badge.soft{background:#f5e8ee;color:#951847}#prodV2 .badge.ok{background:#e8f4ed;color:#276749}#prodV2 .badge.warn{background:#f8ecdb;color:#9d5f1b}#prodV2 .badge.gray{background:#ebe5df;color:#6f6262}
+#prodV2 .product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#prodV2 .p-card{cursor:pointer;text-align:left;color:inherit;width:100%;padding:16px;border:1px solid #DCC9BB;border-radius:20px;background:#fffdfb;transition:border-color .16s,box-shadow .16s,transform .16s}
+#prodV2 .p-card:hover{border-color:#951847;box-shadow:0 6px 22px rgba(149,24,71,.11);transform:translateY(-1px)}
+#prodV2 .p-card.selected{border-color:#951847;box-shadow:inset 0 0 0 1px #951847,0 8px 24px rgba(149,24,71,.1)}
+#prodV2 .p-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+#prodV2 .p-thumb{width:50px;height:50px;flex-shrink:0;border-radius:15px;background:linear-gradient(135deg,#f7dce6,#e4c7b7);display:grid;place-items:center;color:#951847;font-size:22px}
+#prodV2 .p-card-code{font-size:12px;font-weight:700;color:#7a6768}
+#prodV2 .p-card h4{margin:2px 0 10px;font-size:17px;color:#261f23}
+#prodV2 .simple-list{display:flex;flex-direction:column;gap:8px}
+#prodV2 .simple-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 12px;border:1px solid #DCC9BB;border-radius:13px;background:#fff9f5;font-size:13px}
+#prodV2 .simple-item span{color:#7a6768}#prodV2 .simple-item strong{color:#261f23}
+#prodV2 .p-card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:13px;color:#951847;font-size:13px;font-weight:800}
+#prodV2 .p-detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+#prodV2 .p-detail-top h3{font-size:24px;margin:8px 0 8px;color:#261f23}
+#prodV2 .p-detail-top p{margin:0;color:#7a6768;line-height:1.5}
+#prodV2 .p-product-id{font-size:12px;letter-spacing:.13em;color:#951847;font-weight:800}
+#prodV2 .p-detail-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+#prodV2 .summary-card{padding:14px;border:1px solid #DCC9BB;border-radius:16px;background:#fff9f5}
+#prodV2 .summary-card small{color:#7a6768;font-size:11.5px;letter-spacing:.08em;font-weight:700}
+#prodV2 .summary-card strong{display:block;font-size:26px;margin:8px 0 4px;color:#261f23}
+#prodV2 .helper-note{font-size:12px;color:#7a6768}
+#prodV2 .p-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:13px;border-bottom:1px solid #DCC9BB;margin-bottom:18px}
+#prodV2 .p-tabs button{height:38px;border-radius:12px;border:1px solid #DCC9BB;background:#fff9f5;padding:0 14px;font-weight:700;color:#7a6768;cursor:pointer}
+#prodV2 .p-tabs button.active{background:#f7e8ef;border-color:#ddacc1;color:#951847}
+#prodV2 .p-detail-grid{display:grid;grid-template-columns:1.35fr .75fr;gap:14px}
+#prodV2 .chart-card{padding:16px;border-radius:20px;border:1px solid #DCC9BB;background:#fffdfb}
+#prodV2 .chart-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+#prodV2 .chart-title{font-size:16px;font-weight:800;color:#261f23}
+#prodV2 .chart-sub{color:#7a6768;font-size:12.5px;max-width:420px}
+#prodV2 .p-activities{display:flex;flex-direction:column;gap:10px}
+#prodV2 .p-mini-row{background:#fff9f5;border:1px solid #DCC9BB;border-radius:14px;padding:12px 13px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+#prodV2 .p-mini-row strong{display:block;margin-bottom:4px;color:#261f23;font-size:13.5px}
+#prodV2 .p-mini-row small{display:block;color:#7a6768;font-size:12px}
+#prodV2 .p-row-actions{display:flex;gap:8px;flex-shrink:0}
+#prodV2 .p-live-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+#prodV2 .p-live-right strong{color:#261f23}#prodV2 .p-live-right small{color:#7a6768;font-size:12px}
+#prodV2 .p-video-wrap{margin:8px 0 14px}
+#prodV2 .p-video-record{padding:10px 12px;border:1px solid #DCC9BB;border-radius:14px;background:#fff}
+#prodV2 .p-video-row{padding:9px 4px;display:grid;grid-template-columns:1.6fr 1.5fr .7fr .6fr .9fr;align-items:center;gap:10px;border-bottom:1px solid #eadcd1;font-size:12.5px}
+#prodV2 .p-video-row:last-child{border-bottom:none}
+#prodV2 .p-video-row strong{color:#261f23}
+#prodV2 .p-video-head{font-size:10.5px;letter-spacing:.07em;color:#705c59;font-weight:800}
+#prodV2 .p-clip a{color:#951847;font-weight:700;font-size:12.5px;text-decoration:none}
+#prodV2 .p-clip{font-size:12.5px;color:#7a6768}
+#prodV2 .table-wrap{overflow:auto;border:1px solid #DCC9BB;border-radius:16px;background:#fff}
+#prodV2 .p-detail-table{width:100%;border-collapse:collapse;min-width:760px}
+#prodV2 .p-detail-table th{font-size:11px;letter-spacing:.1em;color:#705c59;font-weight:800;background:#fbf4ef;text-align:left;padding:12px 14px;border-bottom:1px solid #eadcd1}
+#prodV2 .p-detail-table td{padding:12px 14px;border-bottom:1px solid #eadcd1;font-size:13px;color:#261f23;vertical-align:middle}
+#prodV2 .p-detail-table tr:last-child td{border-bottom:none}
+#prodV2 .p-empty{border:1px dashed #DCC9BB;border-radius:14px;padding:22px;color:#7a6768;text-align:center;font-size:13px}
+#prodV2 .p-empty-cell{text-align:center;color:#7a6768;padding:22px;font-size:13px}
+#prodV2 .dash-search{min-width:260px}
+@media(max-width:1200px){#prodV2 .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#prodV2 .p-detail-grid{grid-template-columns:1fr}#prodV2 .p-detail-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){#prodV2 .product-grid{grid-template-columns:1fr}#prodV2 .p-detail-summary{grid-template-columns:1fr}#prodV2 .p-video-row{grid-template-columns:1fr 1fr}#prodV2 .p-video-head{display:none}}
 </style>
 </head>
 <body>
@@ -1431,6 +1507,8 @@ start();
 
 /* Product-centered booking, V10. Owner assignment remains separate from historical booking owners. */
 let productSearch='', productOwnerFilter='';
+let pdTab='videos', productStatusFilter='', productGroupFilter='', productPage=1, productLives=[];
+const PROD_PAGE=9;
 let productRecords=[],productCampaigns=[],productBookings=[];
 async function getAll(table){let collected=[],page=1,total=1;while(collected.length<total&&page<100){const r=await api('/api/data/'+table+'?per_page=1000&page='+page);collected.push(...r.rows);total=r.total;page++;if(!r.rows.length)break}return collected}
 function productTabs(active='products'){return `<div class="product-nav"><button class="${active==='products'?'active':''}" id="tabProductList">Sản phẩm</button><button class="${active==='samples'?'active':''}" id="tabProductSamples">Theo dõi hàng mẫu</button></div>`}
@@ -1502,21 +1580,78 @@ function v12DrawProductDetail(){const container=$('#v12ProductDetail');if(!conta
  if($('#v12ViewSamples'))$('#v12ViewSamples').onclick=()=>navigate('samples');
  if($('#v12VideoSearch'))$('#v12VideoSearch').oninput=e=>{v12Search=e.target.value;const inp=e.target;const table=$('#v12TabContent');if(table){table.innerHTML=v12TableVideos(p);const s=$('#v12VideoSearch');s.focus();s.setSelectionRange(v12Search.length,v12Search.length);document.querySelectorAll('[data-manage-booking]').forEach(btn=>btn.onclick=()=>openBookingVideos(Number(btn.dataset.manageBooking)))}};
 }
+/* ===== Sản phẩm V2 — giao diện mới, dữ liệu gốc CRM ===== */
+function gmvShort(n){n=Math.round(Number(n||0));if(!n)return '0đ';return n>=1e6?(n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr':n>=1e3?Math.round(n/1e3).toLocaleString('vi-VN')+'k':n.toLocaleString('vi-VN')+'đ'}
+function pBadgeCls(st){st=String(st||'').trim();if(['Tạm dừng','Ngừng bán'].includes(st))return 'gray';if(['Chuẩn bị','Đề xuất'].includes(st))return 'warn';return 'soft'}
+function pBadge(st){st=String(st||'').trim();const ok=['Đang bán','Đang booking','Đang kinh doanh','Đã đăng','Đã chốt','Hoàn thành','Đang thực hiện','Xác nhận','Đã diễn ra','Đã báo cáo','Đã liên hệ','Đang hợp tác'];const gray=['Tạm dừng','Ngừng bán','Đã gỡ','Đã hủy'];const warn=['Chuẩn bị','Đề xuất','Đang đàm phán','Chờ đăng','Nháp','Cần chỉnh sửa','Dự kiến'];const c=ok.includes(st)?'ok':gray.includes(st)?'gray':warn.includes(st)?'warn':'soft';return `<span class="badge ${c}">${esc(st||'—')}</span>`}
+function prodLivesFor(p){const nm=String(p.name||'').toLowerCase().trim();if(!nm)return [];return productLives.filter(l=>{if(!l||l._kind==='settings')return false;const pr=String(l.product||'').toLowerCase().trim();return pr&&(pr===nm||pr.includes(nm)||nm.includes(pr))})}
+function prodAgg(p){const d=v12VideoRows(p);const counts=productCounts(p);const lv=prodLivesFor(p);const videoGmv=d.videos.reduce((s,v)=>s+Number(v.gmv||0),0);const liveGmv=lv.reduce((s,l)=>s+Number(l.gmv||0),0);return {d,counts,lv,videoGmv,liveGmv,gmv:videoGmv+liveGmv}}
+function prodTabBody(p,a){const d=a.d;
+ if(pdTab==='videos'){
+  const needVideo=d.bookings.filter(b=>!d.videos.some(v=>Number(v.booking_id)===Number(b.id))).length;
+  const postedNoLink=d.videos.filter(v=>v.status==='Đã đăng'&&!v12GetVideoHref(v.url)).length;
+  const draftLives=a.lv.filter(l=>!l.status||l.status==='Nháp').length;
+  const acts=[];
+  if(needVideo)acts.push([`${needVideo} booking chưa gắn video`,'Mở booking để thêm link video','warn','Cần xử lý']);
+  if(postedNoLink)acts.push([`${postedNoLink} video đã đăng thiếu link`,'Bổ sung link để đối soát','warn','Cần xử lý']);
+  if(draftLives)acts.push([`${draftLives} phiên live còn nháp`,'Chưa gửi / duyệt báo cáo phiên','soft','Theo dõi']);
+  acts.push(['Chỉ số chưa đối soát sàn','GMV lấy theo dữ liệu nhân sự nhập','gray','Tham khảo']);
+  const blocks=d.bookings.length?d.bookings.map(b=>{const partner=state.partners.find(x=>Number(x.id)===Number(b.partner_id));const vids=d.videos.filter(v=>Number(v.booking_id)===Number(b.id));const posted=vids.filter(v=>v.status==='Đã đăng').length;const bv=vids.length?`<span class="badge ok">${vids.length} video${posted<vids.length?` · ${vids.length-posted} chờ`:''}</span>`:`<span class="badge warn">Chưa có video</span>`;const rec=vids.length?`<div class="p-video-record"><div class="p-video-row p-video-head"><span>VIDEO</span><span>LINK</span><span>XEM</span><span>ĐƠN</span><span>GMV</span></div>${vids.map(v=>{const href=v12GetVideoHref(v.url);return `<div class="p-video-row"><span>${pBadge(v.status)} ${esc(v.title||'Video')}</span><span class="p-clip">${href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">↗ Mở link</a>`:'Chưa có link'}</span><strong>${num(v.views||0)}</strong><strong>${num(v.orders||0)}</strong><strong>${gmvShort(v.gmv)}</strong></div>`}).join('')}</div>`:'';return `<div class="p-mini-row"><div><strong>${esc(partner?.name||'Đối tác')} ${bv}</strong><small>${esc(b.campaign||'')} · ${esc(b.status||'')}${b.owner?' · '+esc(b.owner):''}${b.deadline?' · Deadline '+shortDate(b.deadline):''}</small></div><div class="p-row-actions">${vids.length?`<button class="mini-btn" data-toggle-vids="${b.id}">Xem ${vids.length} video</button>`:''}<button class="mini-btn" data-manage-booking="${b.id}">${vids.length?'Sửa video':'+ Gắn video'}</button></div></div><div class="p-video-wrap" id="pvids-${b.id}" hidden>${rec}</div>`}).join(''):'<div class="p-empty">Sản phẩm chưa có booking. Hãy tạo booking trong chiến dịch.</div>';
+  return `<div class="p-detail-grid"><div class="chart-card"><div class="chart-header"><div><div class="chart-title">Video theo booking KOC/KOL</div><div class="chart-sub">Mỗi booking có thể có nhiều video. Mở đối tác để nhập hoặc chỉnh sửa.</div></div><button class="mini-btn" data-new-product-campaign="${p.id}">+ Gắn booking</button></div>${blocks}</div><div class="chart-card"><div class="chart-header"><div><div class="chart-title">Những việc cần theo dõi</div><div class="chart-sub">Theo sản phẩm đang chọn</div></div></div><div class="p-activities">${acts.map(x=>`<div class="p-mini-row"><div><strong>${x[0]}</strong><small>${x[1]}</small></div><span class="badge ${x[2]}">${x[3]}</span></div>`).join('')}</div></div></div>`;
+ }
+ if(pdTab==='bookings'){
+  const rows=d.bookings.length?d.bookings.map(b=>{const partner=state.partners.find(x=>Number(x.id)===Number(b.partner_id));const vc=d.videos.filter(v=>Number(v.booking_id)===Number(b.id)).length;return `<tr><td><strong>${esc(partner?.name||'Đối tác')}</strong></td><td>${esc(b.campaign||'—')}</td><td>${esc(b.owner||'—')}</td><td>${pBadge(b.status)}</td><td>${b.booking_fee?money(b.booking_fee):'—'}</td><td>${b.deadline?shortDate(b.deadline):'—'}</td><td>${vc}</td><td><button class="mini-btn" data-manage-booking="${b.id}">Video</button></td></tr>`}).join(''):'<tr><td colspan="8" class="p-empty-cell">Chưa có booking cho sản phẩm này.</td></tr>';
+  return `<div class="chart-card"><div class="chart-header"><div><div class="chart-title">Booking KOC/KOL của ${esc(p.name)}</div><div class="chart-sub">Liên kết tới booking đã có, không tạo dữ liệu trùng.</div></div><button class="mini-btn" data-new-product-campaign="${p.id}">+ Gắn booking</button></div><div class="table-wrap"><table class="p-detail-table"><thead><tr><th>ĐỐI TÁC</th><th>CHIẾN DỊCH</th><th>PHỤ TRÁCH</th><th>TRẠNG THÁI</th><th>CAST</th><th>DEADLINE</th><th>VIDEO</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+ }
+ if(pdTab==='live'){
+  const dur=l=>{const t=s=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(s||'').trim());return m?+m[1]*60+ +m[2]:null};const s=t(l.start),e=t(l.end);if(s==null||e==null)return '';let x=e-s;if(x<0)x+=1440;return x?`${Math.floor(x/60)}h${x%60?(x%60)+'p':''}`:''};
+  const blocks=a.lv.length?a.lv.map(l=>`<div class="p-mini-row"><div><strong>${esc(l.channel||'Phiên live')}${l.type?` · ${esc(l.type)}`:''}</strong><small>${shortDate(l.date||l.session_date)}${l.start?` · ${esc(l.start)}–${esc(l.end||'')}`:''}${dur(l)?' · '+dur(l):''} · Người live: ${esc(l.host||l.owner||'—')}</small></div><div class="p-live-right"><strong>${gmvShort(l.gmv)}</strong><small>${num(l.orders||0)} đơn</small>${pBadge(l.status)}</div></div>`).join(''):'<div class="p-empty">Chưa có phiên livestream nào khớp tên sản phẩm này.</div>';
+  return `<div class="chart-card"><div class="chart-header"><div><div class="chart-title">Livestream liên quan sản phẩm</div><div class="chart-sub">Số phiên, người live, thời lượng, đơn và GMV ở cấp phiên · không cộng trùng GMV.</div></div></div><div class="p-activities">${blocks}</div></div>`;
+ }
+ const fields=[['Tên sản phẩm',p.name],['Mã SKU',p.sku||'Chưa có mã'],['Nhóm sản phẩm',p.category||'—'],['Người phụ trách',p.booking_owner||'Chưa phân công'],['Trạng thái',p.status||'Chuẩn bị'],['Ngày ra mắt',p.launch_date?shortDate(p.launch_date):'—'],['Ghi chú',p.notes||'—']];
+ return `<div class="chart-card"><div class="chart-header"><div><div class="chart-title">Thông tin sản phẩm</div><div class="chart-sub">Mã và người phụ trách theo dữ liệu gốc</div></div><button class="mini-btn" data-edit-product="${p.id}">✎ Sửa</button></div><div class="p-activities">${fields.map(f=>`<div class="p-mini-row"><div><strong>${esc(f[0])}</strong><small>${esc(f[1])}</small></div></div>`).join('')}<div class="p-mini-row"><div><strong>Theo dõi hàng mẫu</strong><small>Lịch sử gửi mẫu của sản phẩm giữ ở trang hàng mẫu</small></div><button class="mini-btn" data-view-samples>Mở danh sách ↗</button></div></div></div>`;
+}
+function prodDetail(p,isAdmin){const a=prodAgg(p);const camps=productCampaigns.filter(c=>Number(c.product_id)===Number(p.id));const campNames=camps.map(c=>c.name).filter(Boolean).join(', ')||'Chưa gắn chiến dịch';
+ const summary=`<div class="p-detail-summary"><div class="summary-card"><small>TỔNG BOOKING</small><strong>${a.d.bookings.length}</strong><span class="helper-note">Đối tác gắn với sản phẩm</span></div><div class="summary-card"><small>VIDEO ĐÃ ĐĂNG</small><strong>${a.d.posted.length}</strong><span class="helper-note">Từ các booking liên quan</span></div><div class="summary-card"><small>PHIÊN LIVESTREAM</small><strong>${a.lv.length}</strong><span class="helper-note">Khớp theo tên sản phẩm</span></div><div class="summary-card"><small>GMV ĐÃ NHẬP</small><strong>${gmvShort(a.gmv)}</strong><span class="helper-note">Video + live · chưa đối soát sàn</span></div></div>`;
+ const tabs=[['videos','Video & nội dung'],['bookings','Booking KOC/KOL'],['live','Livestream'],['info','Thông tin sản phẩm']].map(([id,l])=>`<button data-p-tab="${id}" class="${pdTab===id?'active':''}">${l}</button>`).join('');
+ return `<div class="panel p-section" id="pDetail"><div class="p-detail-top"><div><div class="p-product-id">${esc(p.sku||('SP-'+p.id))} · ${esc(p.status||'Chuẩn bị')}</div><h3>${esc(p.name)}</h3><p>${esc(p.category||'—')} · Nhân sự booking: <strong>${esc(p.booking_owner||'Chưa phân công')}</strong> · Chiến dịch: <strong>${esc(campNames)}</strong></p></div><div class="p-toolbar-right"><button class="ghost-btn" data-edit-product="${p.id}">✎ Sửa thông tin</button><button class="primary-btn" data-new-product-campaign="${p.id}">＋ Gắn booking</button>${isAdmin?`<button class="ghost-btn p-del" data-remove-product="${p.id}">🗑 Xóa</button>`:''}</div></div>${summary}<div class="p-tabs">${tabs}</div><div id="pTabBody">${prodTabBody(p,a)}</div></div>`;
+}
+function bindProdSearch(id){const el=$('#'+id);if(!el)return;el.oninput=e=>{productSearch=e.target.value;productPage=1;const pos=e.target.selectionStart;renderProducts().then(()=>{const n=$('#'+id);if(n){n.focus();n.setSelectionRange(pos,pos)}})}}
 async function renderProducts(){
- await loadPartners();[productRecords,productCampaigns,productBookings,v12VideoCache]=await Promise.all(['products','campaigns','bookings','videos'].map(getAll));
- const owners=[...new Set(productRecords.map(p=>p.booking_owner).filter(Boolean))].sort();
- const visible=productRecords.filter(p=>(!productSearch||[p.name,p.sku,p.category,p.booking_owner].join(' ').toLowerCase().includes(productSearch.toLowerCase()))&&(!productOwnerFilter||p.booking_owner===productOwnerFilter));
- const overview=`<div class="product-summary"><div class="product-stat"><small>SẢN PHẨM</small><strong>${productRecords.length}</strong></div><div class="product-stat"><small>ĐANG BOOKING</small><strong>${productRecords.filter(x=>x.status==='Đang booking').length}</strong></div><div class="product-stat"><small>VIDEO ĐÃ ĐĂNG</small><strong>${v12VideoCache.filter(v=>v.status==='Đã đăng'&&Number(v.booking_id)).length}</strong></div><div class="product-stat"><small>TỔNG LINK VIDEO</small><strong>${v12VideoCache.filter(v=>v12GetVideoHref(v.url)&&Number(v.booking_id)).length}</strong></div></div>`;
- $('#mainContent').innerHTML=title('','Sản phẩm','',`<button class="primary" id="newProduct">＋ Thêm sản phẩm</button>`)+productTabs('products')+overview+
- `<div class="product-filter"><input id="productSearch" placeholder="Tìm sản phẩm, SKU..." value="${esc(productSearch)}"><select id="productOwnerFilter"><option value="">Tất cả nhân sự</option>${owners.map(o=>`<option value="${esc(o)}" ${o===productOwnerFilter?'selected':''}>${esc(o)}</option>`).join('')}</select></div>`+
- `<div class="product-table-wrap"><table class="product-table"><thead><tr><th>SẢN PHẨM / SKU</th><th>PHỤ TRÁCH</th><th>CHIẾN DỊCH</th><th>KOC/KOL ĐÃ CHỐT</th><th>VIDEO ĐÃ ĐĂNG</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody>${visible.map(p=>{const counts=productCounts(p),d=v12VideoRows(p);return `<tr class="${Number(v12SelectedProductId)===p.id?'v12-selected-row':''}"><td><button class="v12-product-name" data-open-product="${p.id}">${esc(p.name)}</button><div class="table-sub">${esc(p.sku||'')}</div></td><td><strong>${esc(p.booking_owner||'—')}</strong></td><td>${counts.campaigns}</td><td>${counts.koc} KOC · ${counts.kol} KOL</td><td><b>${d.posted.length}</b> / ${d.videos.length}</td><td><span class="tag ${p.status==='Đang booking'?'ok':''}">${esc(p.status||'Chuẩn bị')}</span></td><td><div class="product-actions"><button data-open-product="${p.id}">Xem video</button><button data-edit-product="${p.id}">Sửa</button><button data-new-product-campaign="${p.id}">+ Chiến dịch</button></div></td></tr>`}).join('')||'<tr><td colspan="7" class="v12-empty">Không tìm thấy sản phẩm</td></tr>'}</tbody></table></div><div id="v12ProductDetail"></div>`;
- bindProductTabs();$('#newProduct').onclick=()=>openProductEditor();
- $('#productSearch').oninput=e=>{productSearch=e.target.value;const pos=e.target.selectionStart;renderProducts().then(()=>{const inp=$('#productSearch');inp?.focus();inp?.setSelectionRange(pos,pos)})};
- $('#productOwnerFilter').onchange=e=>{productOwnerFilter=e.target.value;renderProducts()};
- document.querySelectorAll('[data-open-product]').forEach(el=>el.onclick=()=>{v12SelectedProductId=Number(el.dataset.openProduct);v12Search='';v12SelectedTab='videos';document.querySelectorAll('.v12-selected-row').forEach(r=>r.classList.remove('v12-selected-row'));el.closest('tr')?.classList.add('v12-selected-row');v12DrawProductDetail();$('#v12ProductDetail')?.scrollIntoView({behavior:'smooth',block:'start'})});
- document.querySelectorAll('[data-edit-product]').forEach(el=>el.onclick=()=>openProductEditor(productRecords.find(p=>p.id===Number(el.dataset.editProduct))));
- document.querySelectorAll('[data-new-product-campaign]').forEach(el=>el.onclick=()=>openCampaignEditor(null,productRecords.find(p=>p.id===Number(el.dataset.newProductCampaign))));
- if(v12SelectedProductId)v12DrawProductDetail();
+ await loadPartners();[productRecords,productCampaigns,productBookings,v12VideoCache,productLives]=await Promise.all(['products','campaigns','bookings','videos','lives'].map(getAll));
+ const isAdmin=state.user?.role==='admin';
+ const q=productSearch.toLowerCase();
+ const groups=[...new Set(productRecords.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'vi'));
+ const statuses=[...new Set(productRecords.map(p=>p.status).filter(Boolean))];
+ const visible=productRecords.filter(p=>(!q||[p.name,p.sku,p.category,p.booking_owner].join(' ').toLowerCase().includes(q))&&(!productStatusFilter||p.status===productStatusFilter)&&(!productGroupFilter||p.category===productGroupFilter));
+ const selId=(v12SelectedProductId&&productRecords.some(p=>Number(p.id)===Number(v12SelectedProductId)))?v12SelectedProductId:(visible[0]?visible[0].id:null);
+ v12SelectedProductId=selId;
+ const totalPages=Math.max(1,Math.ceil(visible.length/PROD_PAGE));if(productPage>totalPages)productPage=totalPages;
+ const pageItems=visible.slice((productPage-1)*PROD_PAGE,productPage*PROD_PAGE);
+ const cards=pageItems.map(p=>{const a=prodAgg(p);const sel=Number(v12SelectedProductId)===Number(p.id);return `<button class="product-card p-card ${sel?'selected':''}" data-open-product="${p.id}"><div class="p-card-head"><span class="p-thumb">◈</span><span class="badge ${pBadgeCls(p.status)}">${esc(p.status||'Chuẩn bị')}</span></div><div class="p-card-code">${esc(p.sku||'Chưa có mã')} · ${esc(p.category||'—')}</div><h4>${esc(p.name)}</h4><div class="simple-list"><div class="simple-item"><span>Phụ trách</span><strong>${esc(p.booking_owner||'Chưa phân công')}</strong></div><div class="simple-item"><span>Booking</span><strong>${a.d.bookings.length}</strong></div><div class="simple-item"><span>Video đã đăng</span><strong>${a.d.posted.length}</strong></div><div class="simple-item"><span>GMV</span><strong>${gmvShort(a.gmv)}</strong></div></div><div class="p-card-bottom"><span>Xem chi tiết</span><span>→</span></div></button>`}).join('');
+ const statusSel=`<select class="select" id="productStatus"><option value="">Tất cả trạng thái</option>${statuses.map(s=>`<option value="${esc(s)}" ${productStatusFilter===s?'selected':''}>${esc(s)}</option>`).join('')}</select>`;
+ const groupSel=`<select class="select" id="productGroup"><option value="">Tất cả nhóm</option>${groups.map(g=>`<option value="${esc(g)}" ${productGroupFilter===g?'selected':''}>${esc(g)}</option>`).join('')}</select>`;
+ const pager=totalPages>1?`<div class="p-pager"><button class="mini-btn" ${productPage<=1?'disabled':''} data-page="${productPage-1}">←</button><span>Trang ${productPage}/${totalPages}</span><button class="mini-btn" ${productPage>=totalPages?'disabled':''} data-page="${productPage+1}">→</button></div>`:'';
+ const listPanel=`<div class="panel p-list"><div class="panel-head"><div><h3>Danh mục sản phẩm</h3><p>Mỗi sản phẩm là một điểm quản trị: phụ trách, booking, video, live và kết quả.</p></div><button class="primary-btn" id="newProduct">＋ Thêm sản phẩm</button></div><div class="p-toolbar"><div class="p-toolbar-left"><span class="p-count">${visible.length} sản phẩm</span><input class="input" id="productSearch" placeholder="Tìm sản phẩm, SKU, nhân sự..." value="${esc(productSearch)}"/>${statusSel}${groupSel}</div><div class="p-toolbar-right">${pager}<span class="badge soft">Từ sản phẩm đến hiệu quả</span></div></div><div class="product-grid">${cards||'<div class="p-empty">Không tìm thấy sản phẩm khớp với bộ lọc.</div>'}</div></div>`;
+ const sel=productRecords.find(p=>Number(p.id)===Number(v12SelectedProductId));
+ const detail=sel?prodDetail(sel,isAdmin):'';
+ const acts=`<div class="dash-search"><span class="dsi">⌕</span><input id="productSearchTop" placeholder="Tìm sản phẩm, đối tác..." value="${esc(productSearch)}"></div><button class="primary" id="newProduct2">＋ Tạo mới</button>`;
+ $('#mainContent').innerHTML=title('','Sản phẩm','Quản lý sản phẩm, người phụ trách, booking, video và kết quả.',acts)+`<div id="prodV2">${productTabs('products')}${listPanel}${detail}</div>`;
+ bindProductTabs();
+ if($('#newProduct'))$('#newProduct').onclick=()=>openProductEditor();
+ if($('#newProduct2'))$('#newProduct2').onclick=()=>openProductEditor();
+ bindProdSearch('productSearch');bindProdSearch('productSearchTop');
+ if($('#productStatus'))$('#productStatus').onchange=e=>{productStatusFilter=e.target.value;productPage=1;renderProducts()};
+ if($('#productGroup'))$('#productGroup').onchange=e=>{productGroupFilter=e.target.value;productPage=1;renderProducts()};
+ $$('[data-page]').forEach(b=>b.onclick=()=>{productPage=Number(b.dataset.page);renderProducts()});
+ $$('[data-open-product]').forEach(el=>el.onclick=()=>{v12SelectedProductId=Number(el.dataset.openProduct);pdTab='videos';renderProducts().then(()=>$('#pDetail')?.scrollIntoView({behavior:'smooth',block:'start'}))});
+ $$('[data-p-tab]').forEach(el=>el.onclick=()=>{pdTab=el.dataset.pTab;renderProducts().then(()=>$('#pDetail')?.scrollIntoView({block:'nearest'}))});
+ $$('[data-edit-product]').forEach(el=>el.onclick=()=>openProductEditor(productRecords.find(p=>p.id===Number(el.dataset.editProduct))));
+ $$('[data-new-product-campaign]').forEach(el=>el.onclick=()=>openCampaignEditor(null,productRecords.find(p=>p.id===Number(el.dataset.newProductCampaign))));
+ $$('[data-remove-product]').forEach(b=>b.onclick=async()=>{const id=Number(b.dataset.removeProduct),p=productRecords.find(x=>x.id===id);if(!confirm('Xóa sản phẩm "'+p.name+'"? Sản phẩm có chiến dịch / lịch sử gửi mẫu sẽ không được phép xóa.'))return;try{await api('/api/data/products/'+id,{method:'DELETE'});toast('Đã xóa sản phẩm');if(Number(v12SelectedProductId)===id)v12SelectedProductId=null;renderProducts()}catch(e){toast(e.message,true)}});
+ $$('[data-toggle-vids]').forEach(b=>b.onclick=()=>{const w=$('#pvids-'+b.dataset.toggleVids);if(w)w.hidden=!w.hidden});
+ $$('[data-manage-booking]').forEach(b=>b.onclick=()=>openBookingVideos(Number(b.dataset.manageBooking)));
+ $$('[data-view-samples]').forEach(b=>b.onclick=()=>navigate('samples'));
 }
 function v12EditorRow(v={},idx=0){let opt=['Chờ đăng','Đã đăng','Cần chỉnh sửa','Đã gỡ'];return `<div class="v12-editor-row" data-video-row data-video-id="${Number(v.id)||0}">
  <label class="wide">Tiêu đề video <input name="title" value="${esc(v.title||'')}" placeholder="VD: Phối đồ với quần nỉ" required></label>
