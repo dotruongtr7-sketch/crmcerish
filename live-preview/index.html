@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#efe5dc" />
+  <title>CERISH CRM | Báo cáo Livestream</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>window.CERISH_SUPABASE_URL='https://miszniovmycefxtpssyn.supabase.co';window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-';window.CERISH_LIVE_API_BASE='';</script>
+  <script src="../supabase-api.js?v=6"></script>
+  <style>
+    /* Nhúng trong CRM qua iframe: ẩn sidebar riêng, để khung chính chiếm toàn bộ */
+    .app>.sidebar{display:none!important}
+    .app{padding:12px!important;gap:0!important}
+    @media(max-width:790px){.app{padding:8px!important}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Điều hướng CERISH">
+      <div class="side-head">
+        <div class="logo">Cerish<span class="logo-dot">.</span></div>
+        <div class="brand-caption">WEAR YOUR SOFT POWER</div>
+        <div class="brand-holding">1999 <span>HOLDINGS</span></div>
+      </div>
+      <nav class="sidebar-nav"><button type="button" class="active"><span class="nav-icon">◉</span>Báo cáo Livestream</button></nav>
+    </aside>
+    <main class="main">
+      <header class="header">
+        <div class="header-copy"><div class="crumb">1999 HOLDINGS <span>/</span> CERISH CRM <span>/</span> <b>BÁO CÁO LIVESTREAM</b></div><h1>Báo cáo Livestream <span class="title-mark">✦</span></h1><p>Kiểm soát phiên live, chi phí, hiệu suất và đầu việc cần xử lý trong một màn hình.</p></div>
+        <div class="header-actions"><button class="button button-outline" id="configBtn">⚙ Ngưỡng cảnh báo</button><button class="button button-outline" id="exportBtn">↓ Xuất CSV</button><button class="button button-primary" id="addBtn">＋ Báo cáo phiên live</button></div>
+      </header>
+      <section class="content">
+        <div class="subbar"><div class="switch" id="rangeSwitch" aria-label="Chọn khoảng thời gian"><button data-range="7" class="active">7 ngày</button><button data-range="30">30 ngày</button><button data-range="all">Tất cả</button></div><div class="subbar-hint"><span class="status-dot"></span><span id="modeLabel">Đang kết nối máy chủ...</span></div></div>
+        <div class="kpi-grid" id="kpis" aria-live="polite"></div>
+        <div class="analysis-row">
+          <section class="panel trend-card"><div class="panel-heading"><div><h2>Xu hướng doanh thu & đơn hàng</h2><p>So sánh hiệu suất các ngày live gần nhất</p></div><span class="panel-tag">BIỂU ĐỒ 7 NGÀY</span></div><div id="trendChart" class="chart-viewport"></div><div class="chart-footer"><span><i class="legend-dot wine"></i> GMV</span><span><i class="legend-dot sand"></i> Đơn hàng (quy đổi thang hiển thị)</span><span class="chart-note">Dựa trên ngày ghi nhận phiên live</span></div></section>
+          <section class="panel priority-card"><div class="panel-heading"><div><h2>Cần ưu tiên xử lý</h2><p>Điểm cần chú ý để không bỏ sót phiên live</p></div><span class="count-chip" id="issueCount">0</span></div><div class="issue-list" id="issueList"></div></section>
+        </div>
+        <div class="analysis-row secondary-row">
+          <section class="panel"><div class="panel-heading"><div><h2>Hiệu suất theo kênh</h2><p>So sánh GMV và số phiên được ghi nhận</p></div></div><div id="channelBars" class="channel-bars"></div></section>
+          <section class="panel"><div class="panel-heading"><div><h2>Tình trạng báo cáo</h2><p>Tiến độ hoàn thành và kiểm soát dữ liệu phiên live</p></div></div><div id="statusChart" class="status-overview"></div></section>
+        </div>
+        <section class="panel table-panel"><div class="panel-heading table-heading"><div><h2>Danh sách báo cáo phiên live</h2><p>Chọn một phiên để xem chi phí, sản phẩm, cảnh báo và chỉnh sửa.</p></div><div class="heading-right"><span class="result-label" id="resultLabel">0 phiên</span><button class="button button-small" id="resetBtn">↺ Xóa bộ lọc</button></div></div>
+          <div class="filters"><label class="search-input"><span>⌕</span><input id="searchInput" placeholder="Tìm kênh, người live, sản phẩm, nhân sự..." /></label><select id="channelFilter" aria-label="Lọc theo kênh"><option value="">Tất cả kênh</option></select><select id="ownerFilter" aria-label="Lọc theo nhân sự"><option value="">Tất cả nhân sự</option></select><select id="statusFilter" aria-label="Lọc theo trạng thái"><option value="">Tất cả trạng thái</option><option>Nháp</option><option>Xác nhận</option></select></div>
+          <div class="table-scroll"><table class="report-table"><thead><tr><th>PHIÊN LIVE / THỜI GIAN</th><th>KÊNH / NGƯỜI LIVE</th><th>PHỤ TRÁCH</th><th class="right">GMV</th><th class="right">ĐƠN</th><th class="right">NGƯỜI XEM</th><th class="right">ADS</th><th class="right">LÃI DỰ KIẾN</th><th>TRẠNG THÁI</th><th></th></tr></thead><tbody id="tableBody"></tbody></table></div>
+          <div class="table-footer"><span id="tableFooter">Đang tải…</span><span>Chỉ tính lãi dự kiến khi đã xác nhận đủ chi phí.</span></div>
+        </section>
+        <div class="disclaimer">GMV là tổng giá trị giao dịch ghi nhận, không đồng nghĩa doanh thu thực nhận. Lợi nhuận dự kiến chưa thay thế đối soát thực tế.</div>
+      </section>
+    </main>
+  </div>
+  <div id="drawerBackdrop" class="drawer-backdrop" hidden></div><aside id="detailDrawer" class="detail-drawer" aria-label="Chi tiết báo cáo phiên live" aria-hidden="true"></aside>
+  <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-label="Biểu mẫu báo cáo livestream"><div class="modal-title"><div><h2 id="modalTitle">Báo cáo phiên live</h2><p id="modalSubtitle">Điền thông tin phiên livestream</p></div><button class="icon-button" id="closeModal" aria-label="Đóng">×</button></div><div id="modalContent" class="modal-content"></div><div id="modalFooter" class="modal-footer"></div></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js?v=16"></script>
+</body>
+</html>
