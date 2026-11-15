@@ -737,7 +737,7 @@ input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!impo
     <div class="logo-area"><img src="cerish-logo.png?v=2" class="brand-logo" alt="CERISH"><div class="brand-sub-center">1999 Holdings</div></div>
     <div class="sidebar-section-label">KHÔNG GIAN LÀM VIỆC</div>
     <nav id="navMain">
-      <button class="nav-item active" data-page="dashboard"><span class="nav-icon">◫</span><span>Tổng quan</span></button>
+      <button class="nav-item active" data-page="dashboard"><span class="nav-icon">◫</span><span>Dashboard</span></button>
       <button class="nav-item" data-page="partners"><span class="nav-icon">♧</span><span>Đối tác KOC/KOL</span></button>
       <button class="nav-item" data-page="campaigns"><span class="nav-icon">◈</span><span>Chiến dịch booking</span></button>
       <button class="nav-item" data-page="products"><span class="nav-icon">◈</span><span>Sản phẩm</span></button>
@@ -853,7 +853,7 @@ const num = v => new Intl.NumberFormat('vi-VN',{maximumFractionDigits:0}).format
 const compact = v => (Number(v)>=1e6 ? (Number(v)/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr' : Number(v)>=1000 ? (Number(v)/1000).toLocaleString('vi-VN',{maximumFractionDigits:1})+'k' : num(v));
 const shortDate = v => {if(!v)return '—'; const d=String(v).slice(0,10).split('-');return d.length===3?`${d[2]}/${d[1]}/${d[0]}`:esc(v)};
 const LABELS = {
- dashboard:'Tổng quan', partners:'Đối tác KOC/KOL', bookings:'Booking hợp tác', campaigns:'Chiến dịch booking', products:'Sản phẩm', samples:'Theo dõi hàng mẫu',
+ dashboard:'Dashboard', partners:'Đối tác KOC/KOL', bookings:'Booking hợp tác', campaigns:'Chiến dịch booking', products:'Sản phẩm', samples:'Theo dõi hàng mẫu',
  videos:'Video & nội dung', lives:'Livestream', tasks:'Công việc', customers:'Khách hàng',
  reports:'Báo cáo hiệu quả', staff:'Hồ sơ nhân sự', dailyreport:'Báo cáo hàng ngày', settings:'Cài đặt'
 };
@@ -897,20 +897,20 @@ async function api(path,opts={}){
 }
 function toast(msg, bad=false){const x=$('#toast');x.textContent=msg;x.style.background=bad?'#a85363':'#493443';x.classList.remove('hidden');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>x.classList.add('hidden'),3400)}
 function showLogin(){$('#app').classList.add('hidden');$('#login').classList.remove('hidden')}
-async function start(){try{state.user=await api('/api/me');$('#login').classList.add('hidden');$('#app').classList.remove('hidden');$('#profileName').textContent=state.user.name;$('#profileRole').textContent=state.user.role==='admin'?'Quản trị viên':state.user.role==='manager'?'Quản lý':'Nhân viên';navigate('partners')}catch{showLogin()}}
+async function start(){try{state.user=await api('/api/me');$('#login').classList.add('hidden');$('#app').classList.remove('hidden');$('#profileName').textContent=state.user.name;$('#profileRole').textContent=state.user.role==='admin'?'Quản trị viên':state.user.role==='manager'?'Quản lý':'Nhân viên';navigate('dashboard')}catch{showLogin()}}
 function setNavigation(p){$$('[data-page]').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===(p==='samples'?'products':p)));$('#sidebar').classList.remove('mobile-open')}
 async function navigate(page){if(page==='bookings')page='campaigns';if(!LABELS[page])return;state.page=page;state.search='';state.filter='';state.groupFilter='';state.videoGroupFilter='';state.productGroupFilter='';state.activityFilter='';state.pageNum=1;setNavigation(page);$('#mainContent').innerHTML='<div class="loading">Đang tải dữ liệu...</div>';try{if(page==='dashboard')return await dashboard();if(page==='campaigns')return await renderCampaigns();if(page==='products')return await renderProducts();if(page==='reports')return await reports();if(page==='staff')return await staffProfiles();if(page==='dailyreport')return await dailyReport();if(page==='lives')return await liveReport();if(page==='settings')return await settings();return await listing()}catch(e){$('#mainContent').innerHTML=`<div class="panel"><p>${esc(e.message)}</p><button class="outline" onclick="navigate('${page}')">Tải lại</button></div>`}}
 function title(eyebrow,name,description,actions=''){
- const label = name==='Danh sách KOC/KOL'?'Đối tác KOC/KOL':name==='Chào mừng trở lại 👋'?'Tổng quan':name==='Cài đặt CRM'?'Cài đặt':name;
+ const label = name==='Danh sách KOC/KOL'?'Đối tác KOC/KOL':name==='Chào mừng trở lại 👋'?'Dashboard':name==='Cài đặt CRM'?'Cài đặt':name;
  const V2D={dashboard:'Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',partners:'Lọc theo trạng thái hợp tác, hình thức nội dung, nhóm sản phẩm và hiệu quả chuyển đổi.',campaigns:'Danh sách chiến dịch bên trái, chi tiết tập trung bên phải — nhìn nhanh, quyết định nhanh.',products:'Theo dõi sản phẩm, người phụ trách, booking liên quan và hiệu quả nội dung.',lives:'Nhân sự nộp báo cáo phiên live, theo dõi hiệu suất theo kênh, theo người và theo ca.',tasks:'Giao việc, theo dõi deadline, ưu tiên và tình trạng xử lý của từng bộ phận.',customers:'Tổng hợp khách hàng, tệp khách mua lại và ghi chú chăm sóc.',reports:'Báo cáo đa chiều theo nội dung, đối tác, chiến dịch, livestream và nhân sự.',staff:'Hồ sơ, KPI và tải công việc của từng nhân sự trong CERISH.',dailyreport:'Điểm lại những việc đã làm, số liệu trong ngày, vướng mắc và hướng xử lý tiếp theo.',settings:'Quản trị tài khoản, phân quyền, cấu hình workspace và các quy tắc vận hành chung.'};
  const d=description||V2D[state.page]||'';
- const crumb = state.page==='dashboard'?'Tổng quan':label;
+ const crumb = state.page==='dashboard'?'Dashboard':label;
  return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(crumb)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
 }
 function card(label,value,foot,icon){return `<div class="kpi-card"><div class="kpi-top"><span>${esc(label)}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value">${value}</div><div class="kpi-foot">${foot}</div></div>`}
 async function dashboard(){
  const acts=`<div class="dash-search"><span class="dsi">⌕</span><input id="dashSearch" placeholder="Tìm chiến dịch, đối tác, sản phẩm..."></div><button class="secondary" id="dashToday">Hôm nay</button><button class="primary" id="dashCreate">＋ Tạo mới</button>`;
- $('#mainContent').innerHTML=title('','Tổng quan điều hành','Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',acts)+`<div id="dash"><div class="dash-empty" style="padding:30px;text-align:center">Đang tải dữ liệu…</div></div>`;
+ $('#mainContent').innerHTML=title('','Dashboard điều hành','Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',acts)+`<div id="dash"><div class="dash-empty" style="padding:30px;text-align:center">Đang tải dữ liệu…</div></div>`;
  if($('#dashToday'))$('#dashToday').onclick=()=>dashboard();
  if($('#dashCreate'))$('#dashCreate').onclick=()=>editModal('partners');
  if($('#dashSearch'))$('#dashSearch').onkeydown=e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(v){state.search=v;navigate('partners')}}};
