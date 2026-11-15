@@ -634,6 +634,16 @@ input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!impo
 .dash-search{display:flex;align-items:center;gap:9px;background:#fff9f5;border:1px solid #DCC9BB;border-radius:14px;height:42px;padding:0 13px;min-width:290px}
 .dash-search input{border:0!important;background:transparent!important;outline:none;width:100%;font-size:13px;height:auto!important}
 .dash-search .dsi{color:#a7918a}
+#dash .dash-rangebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+#dash .dash-switch{display:flex;gap:3px;background:#fff9f5;border:1px solid #DCC9BB;padding:4px;border-radius:12px}
+#dash .dash-switch button{border:0;background:transparent;font-size:12.5px;font-weight:800;padding:8px 15px;color:#8c7c7d;border-radius:8px;cursor:pointer}
+#dash .dash-switch button.active{background:#f5e0e8;color:#951847}
+#dash .dash-daterange{display:flex;align-items:center;gap:4px;border:1px solid #DCC9BB;border-radius:12px;background:#fff9f5;padding:3px 7px}
+#dash .dash-daterange input{border:0!important;background:transparent!important;font-size:12.5px;color:#261f23;padding:4px;height:auto!important}
+#dash .dash-daterange input:focus{outline:none}
+#dash .dash-daterange .drsep{color:#b0a1a8;font-size:12px}
+#dash .dash-daterange button{border:0;background:transparent;color:#a7918a;cursor:pointer;font-size:12px;width:22px;height:22px;border-radius:6px}
+#dash .dash-daterange button:hover{background:#f5e0e8;color:#951847}
 @media(max-width:1200px){#dash .dashboard-grid,#dash .two-col{grid-template-columns:1fr}#dash .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* ===== Sản phẩm V2 (scoped #prodV2) ===== */
 #prodV2{display:flex;flex-direction:column;gap:16px;margin-top:16px}
@@ -908,40 +918,52 @@ function title(eyebrow,name,description,actions=''){
  return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(crumb)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
 }
 function card(label,value,foot,icon){return `<div class="kpi-card"><div class="kpi-top"><span>${esc(label)}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value">${value}</div><div class="kpi-foot">${foot}</div></div>`}
+let dashRange='month', dashFrom='', dashTo='';
 async function dashboard(){
- const acts=`<div class="dash-search"><span class="dsi">⌕</span><input id="dashSearch" placeholder="Tìm chiến dịch, đối tác, sản phẩm..."></div><button class="secondary" id="dashToday">Hôm nay</button><button class="primary" id="dashCreate">＋ Tạo mới</button>`;
+ const acts=`<div class="dash-search"><span class="dsi">⌕</span><input id="dashSearch" placeholder="Tìm chiến dịch, đối tác, sản phẩm..."></div><button class="primary" id="dashCreate">＋ Tạo mới</button>`;
  $('#mainContent').innerHTML=title('','Dashboard điều hành','Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',acts)+`<div id="dash"><div class="dash-empty" style="padding:30px;text-align:center">Đang tải dữ liệu…</div></div>`;
- if($('#dashToday'))$('#dashToday').onclick=()=>dashboard();
  if($('#dashCreate'))$('#dashCreate').onclick=()=>editModal('partners');
  if($('#dashSearch'))$('#dashSearch').onkeydown=e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(v){state.search=v;navigate('partners')}}};
  let B=[],V=[],L=[],T=[],P=[],PR=[];
  try{[B,V,L,T,P,PR]=await Promise.all(['bookings','videos','lives','tasks','partners','products'].map(getAll))}catch(e){const el=$('#dash');if(el)el.innerHTML=`<div class="dash-card" style="padding:22px">Không tải được dữ liệu: ${esc(e.message)}. <button class="secondary" onclick="dashboard()">Thử lại</button></div>`;return}
- const lt=()=>{const n=new Date();return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().slice(0,10)};
- const today=lt(),ym=today.slice(0,7);
- const prevYm=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,7)})();
- const gv=r=>Number(r.gmv||0),dOf=r=>String(r.posted_date||r.session_date||r.date||'').slice(0,10),mOf=r=>String(r.posted_date||r.session_date||r.date||'').slice(0,7);
+ const toISO=d=>new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+ const addDays=(d,k)=>{const x=new Date(d);x.setDate(x.getDate()+k);return x};
+ const now=new Date(),today=toISO(now);
+ const custom=!!(dashFrom||dashTo);
+ let start,end,rangeLabel;
+ if(custom){start=dashFrom||'0000-01-01';end=dashTo||today;rangeLabel=(dashFrom?shortDate(dashFrom):'…')+' → '+(dashTo?shortDate(dashTo):'…');}
+ else if(dashRange==='all'){start='0000-01-01';end=today;rangeLabel='tất cả';}
+ else if(dashRange==='month'){const d=new Date(now);d.setDate(1);start=toISO(d);end=today;rangeLabel='tháng này';}
+ else{const dd=Number(dashRange)||30;start=toISO(addDays(now,-(dd-1)));end=today;rangeLabel=dd+' ngày qua';}
+ const noBound=(dashRange==='all'&&!custom);
+ const inR=d=>{if(noBound)return true;d=String(d||'').slice(0,10);return !!d&&d>=start&&d<=end};
+ const gv=r=>Number(r.gmv||0),dOf=r=>String(r.posted_date||r.session_date||r.date||'').slice(0,10);
  const trFmt=n=>{n=Math.round(Number(n||0));return n>=1e6?(n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr':n>=1e3?Math.round(n/1e3).toLocaleString('vi-VN')+'k':n.toLocaleString('vi-VN')};
  const CONF=new Set(['Đã chốt','Đang thực hiện','Hoàn thành']);
  const pendTasks=T.filter(t=>t.status!=='Hoàn thành').length;if($('#taskPill')){$('#taskPill').textContent=pendTasks;$('#taskPill').classList.toggle('hidden',!pendTasks)}
- const gmvIn=mm=>V.filter(v=>v.status==='Đã đăng'&&mOf(v)===mm).reduce((a,v)=>a+gv(v),0)+L.filter(l=>mOf(l)===mm).reduce((a,l)=>a+gv(l),0);
- const gmvMonth=gmvIn(ym),gmvPrev=gmvIn(prevYm);
- const gDelta=gmvPrev>0?(gmvMonth-gmvPrev)/gmvPrev*100:null;
- const bookingClosed=B.filter(b=>CONF.has(b.status)).length;
- const videoPosted=V.filter(v=>v.status==='Đã đăng').length;
- const videoPartners=new Set(V.filter(v=>v.status==='Đã đăng').map(v=>String(v.partner_id))).size;
- const liveTotal=L.length,liveMonth=L.filter(l=>mOf(l)===ym).length;
- const days=[];for(let i=6;i>=0;i--){const dt=new Date();dt.setDate(dt.getDate()-i);const ds=new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);const val=V.filter(v=>dOf(v)===ds&&v.status==='Đã đăng').reduce((a,v)=>a+gv(v),0)+L.filter(l=>dOf(l)===ds).reduce((a,l)=>a+gv(l),0);days.push({ds,val})}
+ const Vr=V.filter(v=>v.status==='Đã đăng'&&inR(v.posted_date));
+ const Lr=L.filter(l=>inR(l.session_date||l.date));
+ const Br=B.filter(b=>inR(b.contact_date));
+ const gmvRange=Vr.reduce((a,v)=>a+gv(v),0)+Lr.reduce((a,l)=>a+gv(l),0);
+ let gDelta=null;
+ if(!noBound){const s=new Date(start+'T12:00:00'),e=new Date(end+'T12:00:00');const len=Math.round((e-s)/86400000)+1;const pEnd=toISO(addDays(s,-1)),pStart=toISO(addDays(s,-len));const inP=d=>{d=String(d||'').slice(0,10);return !!d&&d>=pStart&&d<=pEnd};const gmvPrev=V.filter(v=>v.status==='Đã đăng'&&inP(v.posted_date)).reduce((a,v)=>a+gv(v),0)+L.filter(l=>inP(l.session_date||l.date)).reduce((a,l)=>a+gv(l),0);gDelta=gmvPrev>0?(gmvRange-gmvPrev)/gmvPrev*100:null;}
+ const bookingClosed=Br.filter(b=>CONF.has(b.status)).length;
+ const videoPosted=Vr.length;
+ const videoPartners=new Set(Vr.map(v=>String(v.partner_id))).size;
+ const liveTotal=Lr.length;
+ const spanLen=noBound?30:Math.min(31,Math.max(1,Math.round((new Date(end+'T12:00:00')-new Date(start+'T12:00:00'))/86400000)+1));
+ const days=[];for(let i=spanLen-1;i>=0;i--){const ds=toISO(addDays(new Date(end+'T12:00:00'),-i));const val=V.filter(v=>v.status==='Đã đăng'&&dOf(v)===ds).reduce((a,v)=>a+gv(v),0)+L.filter(l=>dOf(l)===ds).reduce((a,l)=>a+gv(l),0);days.push({ds,val})}
  const dGmvTotal=days.reduce((a,d)=>a+d.val,0);
- const funnel=[['Đã liên hệ',B.length,'#951847'],['Đang đàm phán',B.filter(b=>b.status==='Đang đàm phán').length,'#b45477'],['Đã chốt',bookingClosed,'#d88faf'],['Đã đăng video',B.filter(b=>b.video_status==='Đã đăng').length,'#f0b6c5']];
+ const funnel=[['Đã liên hệ',Br.length,'#951847'],['Đang đàm phán',Br.filter(b=>b.status==='Đang đàm phán').length,'#b45477'],['Đã chốt',bookingClosed,'#d88faf'],['Đã đăng video',Br.filter(b=>b.video_status==='Đã đăng').length,'#f0b6c5']];
  const fTop=Math.max(1,funnel[0][1]);
- const mix=[['Video đã đăng',videoPosted,'#951847'],['Livestream',L.length,'#d88faf'],['Video chờ đăng',V.filter(v=>v.status!=='Đã đăng').length,'#f0b6c5'],['Booking chưa có nội dung',B.filter(b=>b.video_status==='Chưa đăng').length,'#d9d1ca']].filter(m=>m[1]>0);
+ const mix=[['Video đã đăng',videoPosted,'#951847'],['Livestream',Lr.length,'#d88faf'],['Video chờ đăng',V.filter(v=>v.status!=='Đã đăng'&&inR(v.posted_date||v.created_at)).length,'#f0b6c5'],['Booking chưa có nội dung',Br.filter(b=>b.video_status==='Chưa đăng').length,'#d9d1ca']].filter(m=>m[1]>0);
  const mixTotal=mix.reduce((a,m)=>a+m[1],0);
  const toMin=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(t||'').trim());return m?(+m[1])*60+(+m[2]):null};
  const durOf=l=>{if(Number(l.duration_minutes)>0)return Number(l.duration_minutes);const s=toMin(l.start),e=toMin(l.end);if(s==null||e==null)return 0;let d=e-s;if(d<0)d+=1440;return d};
- const hm=new Map();L.forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=durOf(l);m.n++;hm.set(h,m)});
+ const hm=new Map();Lr.forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=durOf(l);m.n++;hm.set(h,m)});
  const hosts=[...hm.values()].map(m=>({...m,ph:m.mins>0?m.gmv/(m.mins/60):0})).sort((a,b)=>b.ph-a.ph).slice(0,4);
  const hostMax=Math.max(1,...hosts.map(h=>h.ph));
- const livesDraft=L.filter(l=>!l.status||l.status==='Nháp').length;
+ const livesDraft=Lr.filter(l=>!l.status||l.status==='Nháp').length;
  const overdue=B.filter(b=>b.deadline&&b.deadline<today&&b.video_status!=='Đã đăng'&&CONF.has(b.status)).length;
  const unassigned=PR.filter(p=>!String(p.booking_owner||'').trim()).length;
  const alerts=[];
@@ -950,6 +972,7 @@ async function dashboard(){
  if(unassigned)alerts.push([`${unassigned} sản phẩm chưa có người phụ trách`,'Cần phân công nhân sự booking','gray']);
  const pName=id=>P.find(p=>String(p.id)===String(id))?.name||'';
  const todayT=T.filter(t=>String(t.due_date||'').slice(0,10)===today&&t.status!=='Hoàn thành').slice(0,6);
+ const rangeBar=`<div class="dash-rangebar"><div class="dash-switch">${[['7','7 ngày'],['30','30 ngày'],['month','Tháng này'],['all','Tất cả']].map(([k,l])=>`<button data-drange="${k}" class="${(!custom&&dashRange===k)?'active':''}">${l}</button>`).join('')}</div><div class="dash-daterange"><input type="date" id="dashFrom" value="${dashFrom}" max="${today}" aria-label="Từ ngày"><span class="drsep">–</span><input type="date" id="dashTo" value="${dashTo}" max="${today}" aria-label="Đến ngày"><button id="dashClearDate" title="Bỏ chọn ngày">✕</button></div></div>`;
  const kpi=(l,v,note,dstr,dir)=>`<div class="kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div><div class="kpi-foot"><span>${note}</span>${dstr?`<span class="${dir}">${dstr}</span>`:''}</div></div>`;
  const bd=(txt,cls)=>`<span class="badge ${cls}">${txt}</span>`;
  const W=760,H=280,x0=50,x1=712,yTop=52,yBot=235,maxG=Math.max(1,...days.map(d=>d.val)),n=days.length;
@@ -959,19 +982,19 @@ async function dashboard(){
  const areaPath=linePath+` L${xs(n-1).toFixed(1)} ${yBot} L${x0} ${yBot} Z`;
  const grid=[85,135,185].map(y=>`<path d="M${x0} ${y} H${x1}" stroke="#e6d8ce" stroke-dasharray="4 6"/>`).join('');
  const dots=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5.5" fill="#951847"/><circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="12" fill="#951847" opacity=".12"/>`).join('');
- const xlab=days.map((d,i)=>`<text x="${xs(i).toFixed(1)}" y="266" text-anchor="middle" fill="#7d6b69" font-size="12">${d.ds.slice(8)}/${d.ds.slice(5,7)}</text>`).join('');
+ const lblStep=Math.max(1,Math.ceil(n/8));const xlab=days.map((d,i)=>(i%lblStep===0||i===n-1)?`<text x="${xs(i).toFixed(1)}" y="266" text-anchor="middle" fill="#7d6b69" font-size="12">${d.ds.slice(8)}/${d.ds.slice(5,7)}</text>`:'').join('');
  const lineSvg=`<svg viewBox="0 0 ${W} ${H}" fill="none"><path d="M${x0} ${yBot} H${x1}" stroke="#d8c8bc"/>${grid}<path d="${areaPath}" fill="url(#dgrad)" opacity=".5"/><path d="${linePath}" fill="none" stroke="#951847" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="dgrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d88faf"/><stop offset="1" stop-color="#f7f1eb"/></linearGradient></defs>${dots}${xlab}</svg>`;
  let acc=0;const ringStops=mixTotal?mix.map(m=>{const s=acc/mixTotal*360;acc+=m[1];return `${m[2]} ${s.toFixed(1)}deg ${(acc/mixTotal*360).toFixed(1)}deg`}).join(','):'#d9d1ca 0deg 360deg';
  const liveBars=hosts.length?hosts.map(h=>`<div class="lb-row"><span class="lb-name">${esc(h.h)}</span><div class="lb-track"><div class="lb-fill" style="width:${Math.max(7,h.ph/hostMax*100).toFixed(0)}%"></div></div><span class="lb-val">${trFmt(h.ph)}/giờ</span></div>`).join(''):'<div class="dash-empty">Chưa có dữ liệu GMV/thời lượng phiên live để so sánh.</div>';
- const html=`<div class="kpi-grid">
- ${kpi('GMV THÁNG NÀY',trFmt(gmvMonth)+'đ','So với tháng trước',gDelta===null?'':(gDelta>=0?'+':'')+gDelta.toFixed(1)+'%',gDelta>=0?'up':'down')}
- ${kpi('BOOKING ĐÃ CHỐT',num(bookingClosed),'KOC + KOL toàn hệ thống','','')}
+ const html=rangeBar+`<div class="kpi-grid">
+ ${kpi('GMV',trFmt(gmvRange)+'đ',gDelta===null?('Trong '+rangeLabel):'So với kỳ trước',gDelta===null?'':(gDelta>=0?'+':'')+gDelta.toFixed(1)+'%',gDelta>=0?'up':'down')}
+ ${kpi('BOOKING ĐÃ CHỐT',num(bookingClosed),'Liên hệ trong '+rangeLabel,'','')}
  ${kpi('VIDEO ĐÃ ĐĂNG',num(videoPosted),'Từ '+num(videoPartners)+' đối tác','','')}
- ${kpi('LIVESTREAM',num(liveTotal),num(liveMonth)+' phiên trong tháng','','')}
+ ${kpi('LIVESTREAM',num(liveTotal),'Trong '+rangeLabel,'','')}
  </div>
  <div class="dashboard-grid">
-  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">GMV 7 ngày gần nhất</div><div class="chart-sub">Tổng GMV video + live theo ngày · ${trFmt(dGmvTotal)}đ trong 7 ngày</div></div></div><div class="line-chart">${dGmvTotal>0?lineSvg:'<div class="dash-empty" style="padding:40px">Chưa đủ dữ liệu GMV 7 ngày.</div>'}</div><div class="chart-legend"><span><span class="dot" style="background:#951847"></span>GMV theo ngày</span></div></div>
-  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Funnel booking</div><div class="chart-sub">Nhìn nhanh chỗ nghẽn trong quy trình hợp tác</div></div></div><div class="simple-list">${B.length?funnel.map(f=>`<div><div class="simple-item"><div><strong>${f[0]}</strong><br><small>${num(f[1])} booking</small></div><div><strong>${Math.round(f[1]/fTop*100)}%</strong></div></div><div class="progress"><span style="width:${Math.round(f[1]/fTop*100)}%;background:${f[2]}"></span></div></div>`).join(''):'<div class="dash-empty">Chưa có booking để dựng phễu.</div>'}</div></div>
+  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Xu hướng GMV theo ngày</div><div class="chart-sub">Tổng GMV video + live · ${trFmt(dGmvTotal)}đ · ${spanLen} ngày gần nhất</div></div></div><div class="line-chart">${dGmvTotal>0?lineSvg:'<div class="dash-empty" style="padding:40px">Chưa đủ dữ liệu GMV trong khoảng này.</div>'}</div><div class="chart-legend"><span><span class="dot" style="background:#951847"></span>GMV theo ngày</span></div></div>
+  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Funnel booking</div><div class="chart-sub">Nhìn nhanh chỗ nghẽn trong quy trình hợp tác</div></div></div><div class="simple-list">${Br.length?funnel.map(f=>`<div><div class="simple-item"><div><strong>${f[0]}</strong><br><small>${num(f[1])} booking</small></div><div><strong>${Math.round(f[1]/fTop*100)}%</strong></div></div><div class="progress"><span style="width:${Math.round(f[1]/fTop*100)}%;background:${f[2]}"></span></div></div>`).join(''):'<div class="dash-empty">Chưa có booking để dựng phễu.</div>'}</div></div>
  </div>
  <div class="dashboard-grid">
   <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Cơ cấu nội dung</div><div class="chart-sub">Tỷ trọng theo loại nội dung thực tế</div></div></div><div class="ring-wrap"><div class="ring" style="background:conic-gradient(${ringStops})"><div class="ring-center"><div><strong>${num(mixTotal)}</strong><br><span>Nội dung<br>đã ghi nhận</span></div></div></div><div class="simple-list">${mix.length?mix.map(m=>`<div class="simple-item"><div><span class="dot" style="background:${m[2]}"></span>${m[0]}</div><strong>${num(m[1])}</strong></div>`).join(''):'<div class="dash-empty">Chưa có nội dung.</div>'}</div></div></div>
@@ -984,6 +1007,10 @@ async function dashboard(){
  const el=$('#dash');if(el)el.innerHTML=html;
  $$('#dash [data-to]').forEach(b=>b.onclick=()=>navigate(b.dataset.to));
  $$('#dash [data-task-open]').forEach(b=>b.onclick=()=>detail('tasks',b.dataset.taskOpen));
+ $$('#dash [data-drange]').forEach(b=>b.onclick=()=>{dashRange=b.dataset.drange;dashFrom='';dashTo='';dashboard()});
+ if($('#dashFrom'))$('#dashFrom').onchange=e=>{dashFrom=e.target.value;dashboard()};
+ if($('#dashTo'))$('#dashTo').onchange=e=>{dashTo=e.target.value;dashboard()};
+ if($('#dashClearDate'))$('#dashClearDate').onclick=()=>{dashFrom='';dashTo='';dashboard()};
 }
 function rowValue(table,key,row){let val=row[key];if(key==='name'||key==='title'||key==='campaign'){
  const secondary= table==='partners'?(row.handle||''):table==='customers'?row.phone:table==='videos'?row.platform:table==='bookings'?row.product:table==='tasks'?(row.partner_name||'Công việc nội bộ'):'';
