@@ -13,6 +13,10 @@
     .app>.sidebar{display:none!important}
     .app{padding:12px!important;gap:0!important}
     @media(max-width:790px){.app{padding:8px!important}}
+    /* Cho các cột form co lại được, tránh thanh cuộn ngang trong biểu mẫu */
+    .form-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+    .field{min-width:0}
+    .field select,.field input{max-width:100%}
   </style>
 </head>
 <body>
