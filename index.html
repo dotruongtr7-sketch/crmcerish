@@ -972,7 +972,7 @@ async function dashboard(){
  if(unassigned)alerts.push([`${unassigned} sản phẩm chưa có người phụ trách`,'Cần phân công nhân sự booking','gray']);
  const pName=id=>P.find(p=>String(p.id)===String(id))?.name||'';
  const todayT=T.filter(t=>String(t.due_date||'').slice(0,10)===today&&t.status!=='Hoàn thành').slice(0,6);
- const rangeBar=`<div class="dash-rangebar"><div class="dash-switch">${[['7','7 ngày'],['30','30 ngày'],['month','Tháng này'],['all','Tất cả']].map(([k,l])=>`<button data-drange="${k}" class="${(!custom&&dashRange===k)?'active':''}">${l}</button>`).join('')}</div><div class="dash-daterange"><input type="date" id="dashFrom" value="${dashFrom}" max="${today}" aria-label="Từ ngày"><span class="drsep">–</span><input type="date" id="dashTo" value="${dashTo}" max="${today}" aria-label="Đến ngày"><button id="dashClearDate" title="Bỏ chọn ngày">✕</button></div></div>`;
+ const rangeBar=`<div class="dash-rangebar"><div class="dash-switch">${[['7','7 ngày'],['30','30 ngày'],['month','Tháng này'],['all','Tất cả']].map(([k,l])=>`<button data-drange="${k}" class="${(!custom&&dashRange===k)?'active':''}">${l}</button>`).join('')}</div></div>`;
  const kpi=(l,v,note,dstr,dir)=>`<div class="kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div><div class="kpi-foot"><span>${note}</span>${dstr?`<span class="${dir}">${dstr}</span>`:''}</div></div>`;
  const bd=(txt,cls)=>`<span class="badge ${cls}">${txt}</span>`;
  const W=760,H=280,x0=50,x1=712,yTop=52,yBot=235,maxG=Math.max(1,...days.map(d=>d.val)),n=days.length;
@@ -1009,9 +1009,6 @@ async function dashboard(){
  $$('#dash [data-to]').forEach(b=>b.onclick=()=>navigate(b.dataset.to));
  $$('#dash [data-task-open]').forEach(b=>b.onclick=()=>detail('tasks',b.dataset.taskOpen));
  $$('#dash [data-drange]').forEach(b=>b.onclick=()=>{dashRange=b.dataset.drange;dashFrom='';dashTo='';dashboard()});
- if($('#dashFrom'))$('#dashFrom').onchange=e=>{dashFrom=e.target.value;dashboard()};
- if($('#dashTo'))$('#dashTo').onchange=e=>{dashTo=e.target.value;dashboard()};
- if($('#dashClearDate'))$('#dashClearDate').onclick=()=>{dashFrom='';dashTo='';dashboard()};
 }
 function rowValue(table,key,row){let val=row[key];if(key==='name'||key==='title'||key==='campaign'){
  const secondary= table==='partners'?(row.handle||''):table==='customers'?row.phone:table==='videos'?row.platform:table==='bookings'?row.product:table==='tasks'?(row.partner_name||'Công việc nội bộ'):'';
