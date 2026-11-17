@@ -948,19 +948,22 @@ async function dashboard(){
  const gv=r=>Number(r.gmv||0),dOf=r=>String(r.posted_date||r.session_date||r.date||'').slice(0,10);
  const trFmt=n=>{n=Math.round(Number(n||0));return n>=1e6?(n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr':n>=1e3?Math.round(n/1e3).toLocaleString('vi-VN')+'k':n.toLocaleString('vi-VN')};
  const CONF=new Set(['Đã chốt','Đang thực hiện','Hoàn thành']);
+ // Phiên live hợp lệ phải có tên kênh (loại bản ghi rác/sót). GMV chỉ tính phiên đã Xác nhận (bỏ Nháp).
+ const hasCh=l=>!!String(l.channel||'').trim();
+ const liveGmvOk=l=>hasCh(l)&&!!l.status&&l.status!=='Nháp';
  const pendTasks=T.filter(t=>t.status!=='Hoàn thành').length;if($('#taskPill')){$('#taskPill').textContent=pendTasks;$('#taskPill').classList.toggle('hidden',!pendTasks)}
  const Vr=V.filter(v=>v.status==='Đã đăng'&&inR(v.posted_date));
- const Lr=L.filter(l=>inR(l.session_date||l.date));
+ const Lr=L.filter(l=>inR(l.session_date||l.date)&&hasCh(l));
  const Br=B.filter(b=>inR(b.contact_date));
- const gmvRange=Vr.reduce((a,v)=>a+gv(v),0)+Lr.reduce((a,l)=>a+gv(l),0);
+ const gmvRange=Vr.reduce((a,v)=>a+gv(v),0)+Lr.filter(l=>l.status&&l.status!=='Nháp').reduce((a,l)=>a+gv(l),0);
  let gDelta=null;
- if(!noBound){const s=new Date(start+'T12:00:00'),e=new Date(end+'T12:00:00');const len=Math.round((e-s)/86400000)+1;const pEnd=toISO(addDays(s,-1)),pStart=toISO(addDays(s,-len));const inP=d=>{d=String(d||'').slice(0,10);return !!d&&d>=pStart&&d<=pEnd};const gmvPrev=V.filter(v=>v.status==='Đã đăng'&&inP(v.posted_date)).reduce((a,v)=>a+gv(v),0)+L.filter(l=>inP(l.session_date||l.date)).reduce((a,l)=>a+gv(l),0);gDelta=gmvPrev>0?(gmvRange-gmvPrev)/gmvPrev*100:null;}
+ if(!noBound){const s=new Date(start+'T12:00:00'),e=new Date(end+'T12:00:00');const len=Math.round((e-s)/86400000)+1;const pEnd=toISO(addDays(s,-1)),pStart=toISO(addDays(s,-len));const inP=d=>{d=String(d||'').slice(0,10);return !!d&&d>=pStart&&d<=pEnd};const gmvPrev=V.filter(v=>v.status==='Đã đăng'&&inP(v.posted_date)).reduce((a,v)=>a+gv(v),0)+L.filter(l=>inP(l.session_date||l.date)&&liveGmvOk(l)).reduce((a,l)=>a+gv(l),0);gDelta=gmvPrev>0?(gmvRange-gmvPrev)/gmvPrev*100:null;}
  const bookingClosed=Br.filter(b=>CONF.has(b.status)).length;
  const videoPosted=Vr.length;
  const videoPartners=new Set(Vr.map(v=>String(v.partner_id))).size;
  const liveTotal=Lr.length;
  const spanLen=noBound?30:Math.min(31,Math.max(1,Math.round((new Date(end+'T12:00:00')-new Date(start+'T12:00:00'))/86400000)+1));
- const days=[];for(let i=spanLen-1;i>=0;i--){const ds=toISO(addDays(new Date(end+'T12:00:00'),-i));const val=V.filter(v=>v.status==='Đã đăng'&&dOf(v)===ds).reduce((a,v)=>a+gv(v),0)+L.filter(l=>dOf(l)===ds).reduce((a,l)=>a+gv(l),0);days.push({ds,val})}
+ const days=[];for(let i=spanLen-1;i>=0;i--){const ds=toISO(addDays(new Date(end+'T12:00:00'),-i));const val=V.filter(v=>v.status==='Đã đăng'&&dOf(v)===ds).reduce((a,v)=>a+gv(v),0)+L.filter(l=>dOf(l)===ds&&liveGmvOk(l)).reduce((a,l)=>a+gv(l),0);days.push({ds,val})}
  const dGmvTotal=days.reduce((a,d)=>a+d.val,0);
  const funnel=[['Đã liên hệ',Br.length,'#951847'],['Đang đàm phán',Br.filter(b=>b.status==='Đang đàm phán').length,'#b45477'],['Đã chốt',bookingClosed,'#d88faf'],['Đã đăng video',Br.filter(b=>b.video_status==='Đã đăng').length,'#f0b6c5']];
  const fTop=Math.max(1,funnel[0][1]);
@@ -972,7 +975,7 @@ async function dashboard(){
  const mixTotal=mix.reduce((a,m)=>a+m[1],0);
  const toMin=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(t||'').trim());return m?(+m[1])*60+(+m[2]):null};
  const durOf=l=>{if(Number(l.duration_minutes)>0)return Number(l.duration_minutes);const s=toMin(l.start),e=toMin(l.end);if(s==null||e==null)return 0;let d=e-s;if(d<0)d+=1440;return d};
- const hm=new Map();Lr.forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=durOf(l);m.n++;hm.set(h,m)});
+ const hm=new Map();Lr.filter(l=>l.status&&l.status!=='Nháp').forEach(l=>{const h=String(l.host||l.owner||'').trim();if(!h)return;const m=hm.get(h)||{h,gmv:0,mins:0,n:0};m.gmv+=gv(l);m.mins+=durOf(l);m.n++;hm.set(h,m)});
  const hosts=[...hm.values()].map(m=>({...m,ph:m.mins>0?m.gmv/(m.mins/60):0})).sort((a,b)=>b.ph-a.ph).slice(0,4);
  const hostMax=Math.max(1,...hosts.map(h=>h.ph));
  const livesDraft=Lr.filter(l=>!l.status||l.status==='Nháp').length;
