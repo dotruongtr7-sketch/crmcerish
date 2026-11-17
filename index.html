@@ -591,16 +591,16 @@ input,select,textarea{border-radius:12px!important}
 .ph-crumb span{color:#951847}
 .page-head h1{font-size:30px!important;margin:0 0 7px!important;letter-spacing:-.4px!important;line-height:1.12}
 .ph-desc{margin:0;color:#7a6768;font-size:13.5px;line-height:1.5;max-width:780px}
-.page-actions{flex-shrink:0}
+.page-actions{flex-shrink:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!important}
 .panel,.table-panel{background:#F7F1EB!important}
 .kpi-card{background:linear-gradient(180deg,#FFFDFB,#F7F1EB)!important}
 #dash{display:flex;flex-direction:column;gap:18px;margin-top:18px}
-#dash .kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-#dash .kpi-card{background:linear-gradient(180deg,#fffdfb,#f7f1eb)!important;border:1px solid #DCC9BB!important;border-radius:18px!important;padding:16px 18px!important;box-shadow:0 8px 22px rgba(75,35,49,.05)!important}
-#dash .kpi-label{font-size:12px;letter-spacing:.14em;font-weight:800;color:#7e6b69;margin-bottom:12px}
-#dash .kpi-value{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-bottom:9px;color:#261f23}
-#dash .kpi-foot{display:flex;justify-content:space-between;align-items:center;color:#7a6768;font-size:12.5px;gap:8px}
+#dash .kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#dash .kpi-card{background:linear-gradient(180deg,#fffdfb,#f7f1eb)!important;border:1px solid #DCC9BB!important;border-radius:15px!important;padding:12px 14px!important;box-shadow:0 6px 16px rgba(75,35,49,.05)!important}
+#dash .kpi-label{font-size:11px;letter-spacing:.12em;font-weight:800;color:#7e6b69;margin-bottom:7px}
+#dash .kpi-value{font-size:23px;font-weight:800;letter-spacing:-.03em;margin-bottom:5px;color:#261f23}
+#dash .kpi-foot{display:flex;justify-content:space-between;align-items:center;color:#7a6768;font-size:11.5px;gap:8px}
 #dash .kpi-foot .up{color:#276749;font-weight:700}#dash .kpi-foot .down{color:#9d1d1d;font-weight:700}
 #dash .dashboard-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
 #dash .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -634,16 +634,18 @@ input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!impo
 .dash-search{display:flex;align-items:center;gap:9px;background:#fff9f5;border:1px solid #DCC9BB;border-radius:14px;height:42px;padding:0 13px;min-width:290px}
 .dash-search input{border:0!important;background:transparent!important;outline:none;width:100%;font-size:13px;height:auto!important}
 .dash-search .dsi{color:#a7918a}
-#dash .dash-rangebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:2px}
-#dash .dash-switch{display:flex;gap:3px;background:#fff9f5;border:1px solid #DCC9BB;padding:4px;border-radius:12px}
-#dash .dash-switch button{border:0;background:transparent;font-size:12.5px;font-weight:800;padding:8px 15px;color:#8c7c7d;border-radius:8px;cursor:pointer}
-#dash .dash-switch button.active{background:#f5e0e8;color:#951847}
-#dash .dash-daterange{display:flex;align-items:center;gap:4px;border:1px solid #DCC9BB;border-radius:12px;background:#fff9f5;padding:3px 7px}
-#dash .dash-daterange input{border:0!important;background:transparent!important;font-size:12.5px;color:#261f23;padding:4px;height:auto!important}
-#dash .dash-daterange input:focus{outline:none}
-#dash .dash-daterange .drsep{color:#b0a1a8;font-size:12px}
-#dash .dash-daterange button{border:0;background:transparent;color:#a7918a;cursor:pointer;font-size:12px;width:22px;height:22px;border-radius:6px}
-#dash .dash-daterange button:hover{background:#f5e0e8;color:#951847}
+.dash-range{display:flex;align-items:center;gap:8px;position:relative}
+.dash-range .dash-switch{display:flex;gap:3px;background:#fff9f5;border:1px solid #DCC9BB;padding:4px;border-radius:12px}
+.dash-range .dash-switch button{border:0;background:transparent;font-size:12.5px;font-weight:800;padding:7px 12px;color:#8c7c7d;border-radius:8px;cursor:pointer;white-space:nowrap}
+.dash-range .dash-switch button.active{background:#f5e0e8;color:#951847}
+.dash-range .dash-cal{width:34px;padding:0;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+.dash-range .dash-cal.active{background:#951847;color:#fff}
+.dash-datepop{position:absolute;top:calc(100% + 8px);right:0;z-index:40;background:#fff9f5;border:1px solid #DCC9BB;border-radius:14px;box-shadow:0 12px 30px rgba(75,35,49,.18);padding:12px;display:flex;flex-direction:column;gap:9px;min-width:230px}
+.dash-datepop .ddp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12.5px;color:#7a6768}
+.dash-datepop .ddp-row input{border:1px solid #DCC9BB!important;background:#fff!important;border-radius:9px;padding:6px 9px;font-size:12.5px;color:#261f23;height:auto!important}
+.dash-datepop .ddp-act{display:flex;justify-content:flex-end;gap:8px;margin-top:2px}
+.dash-datepop .ddp-btn{border:1px solid #DCC9BB;background:#fff;border-radius:9px;padding:6px 12px;font-size:12.5px;font-weight:700;color:#261f23;cursor:pointer}
+.dash-datepop .ddp-btn.primary{background:linear-gradient(180deg,#a11a4d,#771338);border:none;color:#fff}
 @media(max-width:1200px){#dash .dashboard-grid,#dash .two-col{grid-template-columns:1fr}#dash .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* ===== Sản phẩm V2 (scoped #prodV2) ===== */
 #prodV2{display:flex;flex-direction:column;gap:16px;margin-top:16px}
@@ -779,7 +781,7 @@ input,select,textarea{background:#FFF9F5!important;border:1px solid #DCC9BB!impo
 window.CERISH_SUPABASE_URL='https://miszniovmycefxtpssyn.supabase.co';
 window.CERISH_SUPABASE_ANON_KEY='sb_publishable_kX5qHSzaWS50N2Tzh9OOBA_mvrFy6K-';
 </script>
-<script src="supabase-api.js?v=6"></script>
+<script src="supabase-api.js?v=8"></script>
 <style>
 /* Bảng KOC gọn: giảm đệm ô, cỡ chữ và cột cố định để đỡ cuộn ngang */
 .partner-sheet{min-width:0;font-size:12px}
@@ -918,18 +920,24 @@ function title(eyebrow,name,description,actions=''){
  return `<div class="page-head"><div class="ph-text"><div class="ph-crumb">1999 HOLDINGS / CERISH CRM / <span>${esc(crumb)}</span></div><h1>${esc(label)}</h1>${d?`<p class="ph-desc">${esc(d)}</p>`:''}</div><div class="page-actions">${actions}</div></div>`;
 }
 function card(label,value,foot,icon){return `<div class="kpi-card"><div class="kpi-top"><span>${esc(label)}</span><span class="kpi-icon">${icon}</span></div><div class="kpi-value">${value}</div><div class="kpi-foot">${foot}</div></div>`}
-let dashRange='month', dashFrom='', dashTo='';
+let dashRange='month', dashFrom='', dashTo='', dashShowCal=false;
 async function dashboard(){
- const acts=`<div class="dash-search"><span class="dsi">⌕</span><input id="dashSearch" placeholder="Tìm chiến dịch, đối tác, sản phẩm..."></div><button class="primary" id="dashCreate">＋ Tạo mới</button>`;
- $('#mainContent').innerHTML=title('','Dashboard điều hành','Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',acts)+`<div id="dash"><div class="dash-empty" style="padding:30px;text-align:center">Đang tải dữ liệu…</div></div>`;
- if($('#dashCreate'))$('#dashCreate').onclick=()=>editModal('partners');
- if($('#dashSearch'))$('#dashSearch').onkeydown=e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(v){state.search=v;navigate('partners')}}};
- let B=[],V=[],L=[],T=[],P=[],PR=[];
- try{[B,V,L,T,P,PR]=await Promise.all(['bookings','videos','lives','tasks','partners','products'].map(getAll))}catch(e){const el=$('#dash');if(el)el.innerHTML=`<div class="dash-card" style="padding:22px">Không tải được dữ liệu: ${esc(e.message)}. <button class="secondary" onclick="dashboard()">Thử lại</button></div>`;return}
  const toISO=d=>new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
  const addDays=(d,k)=>{const x=new Date(d);x.setDate(x.getDate()+k);return x};
  const now=new Date(),today=toISO(now);
  const custom=!!(dashFrom||dashTo);
+ const rangeControl=`<div class="dash-range"><div class="dash-switch">${[['7','7 ngày'],['30','30 ngày'],['month','Tháng này'],['all','Tất cả']].map(([k,l])=>`<button data-drange="${k}" class="${(!custom&&dashRange===k)?'active':''}">${l}</button>`).join('')}<button class="dash-cal ${custom?'active':''}" data-dcal title="Chọn khoảng ngày">🗓</button></div>${dashShowCal?`<div class="dash-datepop"><div class="ddp-row"><span>Từ ngày</span><input type="date" id="dashFrom" value="${dashFrom}" max="${today}"></div><div class="ddp-row"><span>Đến ngày</span><input type="date" id="dashTo" value="${dashTo}" max="${today}"></div><div class="ddp-act"><button class="ddp-btn" id="dashClearDate">Xóa</button><button class="ddp-btn primary" id="dashApplyDate">Áp dụng</button></div></div>`:''}</div>`;
+ const acts=rangeControl+`<div class="dash-search"><span class="dsi">⌕</span><input id="dashSearch" placeholder="Tìm chiến dịch, đối tác, sản phẩm..."></div><button class="primary" id="dashCreate">＋ Tạo mới</button>`;
+ $('#mainContent').innerHTML=title('','Dashboard điều hành','Theo dõi nhanh tăng trưởng, booking, livestream và hiệu suất nhân sự trong một màn hình.',acts)+`<div id="dash"><div class="dash-empty" style="padding:30px;text-align:center">Đang tải dữ liệu…</div></div>`;
+ if($('#dashCreate'))$('#dashCreate').onclick=()=>editModal('partners');
+ if($('#dashSearch'))$('#dashSearch').onkeydown=e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(v){state.search=v;navigate('partners')}}};
+ $$('[data-drange]').forEach(b=>b.onclick=()=>{dashRange=b.dataset.drange;dashFrom='';dashTo='';dashShowCal=false;dashboard()});
+ const _cal=document.querySelector('[data-dcal]');if(_cal)_cal.onclick=()=>{dashShowCal=!dashShowCal;dashboard()};
+ if($('#dashApplyDate'))$('#dashApplyDate').onclick=()=>{dashFrom=$('#dashFrom').value;dashTo=$('#dashTo').value;dashShowCal=false;dashboard()};
+ if($('#dashClearDate'))$('#dashClearDate').onclick=()=>{dashFrom='';dashTo='';dashShowCal=false;dashboard()};
+ if(window.cerishRefresh){try{await window.cerishRefresh()}catch(e){}}
+ let B=[],V=[],L=[],T=[],P=[],PR=[];
+ try{[B,V,L,T,P,PR]=await Promise.all(['bookings','videos','lives','tasks','partners','products'].map(getAll))}catch(e){const el=$('#dash');if(el)el.innerHTML=`<div class="dash-card" style="padding:22px">Không tải được dữ liệu: ${esc(e.message)}. <button class="secondary" onclick="dashboard()">Thử lại</button></div>`;return}
  let start,end,rangeLabel;
  if(custom){start=dashFrom||'0000-01-01';end=dashTo||today;rangeLabel=(dashFrom?shortDate(dashFrom):'…')+' → '+(dashTo?shortDate(dashTo):'…');}
  else if(dashRange==='all'){start='0000-01-01';end=today;rangeLabel='tất cả';}
@@ -956,6 +964,10 @@ async function dashboard(){
  const dGmvTotal=days.reduce((a,d)=>a+d.val,0);
  const funnel=[['Đã liên hệ',Br.length,'#951847'],['Đang đàm phán',Br.filter(b=>b.status==='Đang đàm phán').length,'#b45477'],['Đã chốt',bookingClosed,'#d88faf'],['Đã đăng video',Br.filter(b=>b.video_status==='Đã đăng').length,'#f0b6c5']];
  const fTop=Math.max(1,funnel[0][1]);
+ const bColors={'Đề xuất':'#d88faf','Đang đàm phán':'#b45477','Đã chốt':'#951847','Đang thực hiện':'#c77799','Hoàn thành':'#276749','Đã hủy':'#bd3b51'};
+ const bDist=['Đề xuất','Đang đàm phán','Đã chốt','Đang thực hiện','Hoàn thành','Đã hủy'].map(s=>[s,Br.filter(b=>b.status===s).length,bColors[s]]).filter(x=>x[1]>0);
+ const bTotal=bDist.reduce((a,m)=>a+m[1],0)||Br.length||1;
+ let bacc=0;const bStops=bDist.length?bDist.map(m=>{const s=bacc/bTotal*360;bacc+=m[1];return `${m[2]} ${s.toFixed(1)}deg ${(bacc/bTotal*360).toFixed(1)}deg`}).join(','):'#d9d1ca 0deg 360deg';
  const mix=[['Video đã đăng',videoPosted,'#951847'],['Livestream',Lr.length,'#d88faf'],['Video chờ đăng',V.filter(v=>v.status!=='Đã đăng'&&inR(v.posted_date||v.created_at)).length,'#f0b6c5'],['Booking chưa có nội dung',Br.filter(b=>b.video_status==='Chưa đăng').length,'#d9d1ca']].filter(m=>m[1]>0);
  const mixTotal=mix.reduce((a,m)=>a+m[1],0);
  const toMin=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(String(t||'').trim());return m?(+m[1])*60+(+m[2]):null};
@@ -972,7 +984,6 @@ async function dashboard(){
  if(unassigned)alerts.push([`${unassigned} sản phẩm chưa có người phụ trách`,'Cần phân công nhân sự booking','gray']);
  const pName=id=>P.find(p=>String(p.id)===String(id))?.name||'';
  const todayT=T.filter(t=>String(t.due_date||'').slice(0,10)===today&&t.status!=='Hoàn thành').slice(0,6);
- const rangeBar=`<div class="dash-rangebar"><div class="dash-switch">${[['7','7 ngày'],['30','30 ngày'],['month','Tháng này'],['all','Tất cả']].map(([k,l])=>`<button data-drange="${k}" class="${(!custom&&dashRange===k)?'active':''}">${l}</button>`).join('')}</div></div>`;
  const kpi=(l,v,note,dstr,dir)=>`<div class="kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div><div class="kpi-foot"><span>${note}</span>${dstr?`<span class="${dir}">${dstr}</span>`:''}</div></div>`;
  const bd=(txt,cls)=>`<span class="badge ${cls}">${txt}</span>`;
  const W=760,H=280,x0=50,x1=712,yTop=52,yBot=235,maxG=Math.max(1,...days.map(d=>d.val)),n=days.length;
@@ -987,7 +998,7 @@ async function dashboard(){
  const lineSvg=`<svg viewBox="0 0 ${W} ${H}" fill="none"><path d="M${x0} ${yBot} H${x1}" stroke="#d8c8bc"/>${grid}<path d="${areaPath}" fill="url(#dgrad)" opacity=".5"/><path d="${linePath}" fill="none" stroke="#951847" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="dgrad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d88faf"/><stop offset="1" stop-color="#f7f1eb"/></linearGradient></defs>${dots}${valLabels}${xlab}</svg>`;
  let acc=0;const ringStops=mixTotal?mix.map(m=>{const s=acc/mixTotal*360;acc+=m[1];return `${m[2]} ${s.toFixed(1)}deg ${(acc/mixTotal*360).toFixed(1)}deg`}).join(','):'#d9d1ca 0deg 360deg';
  const liveBars=hosts.length?hosts.map(h=>`<div class="lb-row"><span class="lb-name">${esc(h.h)}</span><div class="lb-track"><div class="lb-fill" style="width:${Math.max(7,h.ph/hostMax*100).toFixed(0)}%"></div></div><span class="lb-val">${trFmt(h.ph)}/giờ</span></div>`).join(''):'<div class="dash-empty">Chưa có dữ liệu GMV/thời lượng phiên live để so sánh.</div>';
- const html=rangeBar+`<div class="kpi-grid">
+ const html=`<div class="kpi-grid">
  ${kpi('GMV',trFmt(gmvRange)+'đ',gDelta===null?('Trong '+rangeLabel):'So với kỳ trước',gDelta===null?'':(gDelta>=0?'+':'')+gDelta.toFixed(1)+'%',gDelta>=0?'up':'down')}
  ${kpi('BOOKING ĐÃ CHỐT',num(bookingClosed),'Liên hệ trong '+rangeLabel,'','')}
  ${kpi('VIDEO ĐÃ ĐĂNG',num(videoPosted),'Từ '+num(videoPartners)+' đối tác','','')}
@@ -995,7 +1006,7 @@ async function dashboard(){
  </div>
  <div class="dashboard-grid">
   <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Xu hướng GMV theo ngày</div><div class="chart-sub">Tổng GMV video + live · ${trFmt(dGmvTotal)}đ · ${spanLen} ngày gần nhất</div></div></div><div class="line-chart">${dGmvTotal>0?lineSvg:'<div class="dash-empty" style="padding:40px">Chưa đủ dữ liệu GMV trong khoảng này.</div>'}</div><div class="chart-legend"><span><span class="dot" style="background:#951847"></span>GMV theo ngày</span></div></div>
-  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Funnel booking</div><div class="chart-sub">Nhìn nhanh chỗ nghẽn trong quy trình hợp tác</div></div></div><div class="simple-list">${Br.length?funnel.map(f=>`<div><div class="simple-item"><div><strong>${f[0]}</strong><br><small>${num(f[1])} booking</small></div><div><strong>${Math.round(f[1]/fTop*100)}%</strong></div></div><div class="progress"><span style="width:${Math.round(f[1]/fTop*100)}%;background:${f[2]}"></span></div></div>`).join(''):'<div class="dash-empty">Chưa có booking để dựng phễu.</div>'}</div></div>
+  <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Cơ cấu booking</div><div class="chart-sub">Tỷ trọng booking theo trạng thái</div></div></div>${Br.length?`<div class="ring-wrap"><div class="ring" style="background:conic-gradient(${bStops})"><div class="ring-center"><div><strong>${num(Br.length)}</strong><br><span>booking</span></div></div></div><div class="simple-list">${bDist.map(m=>`<div class="simple-item"><div><span class="dot" style="background:${m[2]}"></span>${m[0]}</div><strong>${num(m[1])} · ${Math.round(m[1]/bTotal*100)}%</strong></div>`).join('')}</div></div>`:'<div class="dash-empty">Chưa có booking để thống kê.</div>'}</div>
  </div>
  <div class="dashboard-grid">
   <div class="chart-card"><div class="chart-header"><div><div class="chart-title">Cơ cấu nội dung</div><div class="chart-sub">Tỷ trọng theo loại nội dung thực tế</div></div></div><div class="ring-wrap"><div class="ring" style="background:conic-gradient(${ringStops})"><div class="ring-center"><div><strong>${num(mixTotal)}</strong><br><span>Nội dung<br>đã ghi nhận</span></div></div></div><div class="simple-list">${mix.length?mix.map(m=>`<div class="simple-item"><div><span class="dot" style="background:${m[2]}"></span>${m[0]}</div><strong>${num(m[1])}</strong></div>`).join(''):'<div class="dash-empty">Chưa có nội dung.</div>'}</div></div></div>
@@ -1008,7 +1019,6 @@ async function dashboard(){
  const el=$('#dash');if(el)el.innerHTML=html;
  $$('#dash [data-to]').forEach(b=>b.onclick=()=>navigate(b.dataset.to));
  $$('#dash [data-task-open]').forEach(b=>b.onclick=()=>detail('tasks',b.dataset.taskOpen));
- $$('#dash [data-drange]').forEach(b=>b.onclick=()=>{dashRange=b.dataset.drange;dashFrom='';dashTo='';dashboard()});
 }
 function rowValue(table,key,row){let val=row[key];if(key==='name'||key==='title'||key==='campaign'){
  const secondary= table==='partners'?(row.handle||''):table==='customers'?row.phone:table==='videos'?row.platform:table==='bookings'?row.product:table==='tasks'?(row.partner_name||'Công việc nội bộ'):'';

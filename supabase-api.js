@@ -530,6 +530,9 @@ window.fetch=function(input,opts){
  return realFetch(input,opts);
 };
 
+// Buộc tải lại dữ liệu mới nhất từ máy chủ (dùng khi vừa sửa ở iframe như Livestream/Booking).
+window.cerishRefresh=function(){dumped=false;return ensureData(true)};
+
 // Xuất CSV: trên web thường nên tải file trực tiếp.
 window.demoExport=function(table){
  try{
