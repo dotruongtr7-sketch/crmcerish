@@ -297,6 +297,25 @@ async function handle(path,opts){
   throw new HttpError(404,'Route live không hợp lệ');
  }
 
+ // ===== TikTok Shop: đọc qua RPC, kết nối/đồng bộ qua Edge Function (App Secret nằm ở server) =====
+ if(parts[1]==='tts'){
+  if(!getToken())throw new HttpError(401,'Vui lòng đăng nhập');
+  if(parts[2]==='status'&&method==='GET')return await rpc('cerish_tts_status',{p_token:getToken()});
+  if(parts[2]==='orders'&&method==='GET'){
+   return await rpc('cerish_tts_orders',{p_token:getToken(),p_from:q.get('from')||null,p_to:q.get('to')||null,
+    p_status:q.get('status')||null,p_search:q.get('q')||null,p_limit:Number(q.get('limit')||50),p_offset:Number(q.get('offset')||0)});
+  }
+  if((parts[2]==='connect'||parts[2]==='sync')&&method==='POST'){
+   var fres,fout;
+   try{fres=await realFetch(SB_URL+'/functions/v1/tiktok-shop?action='+parts[2],{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY},body:JSON.stringify({token:getToken()})})}
+   catch(e){throw new HttpError(503,'Không gọi được máy chủ TikTok Shop (Edge Function chưa deploy?)')}
+   try{fout=await fres.json()}catch(e){throw new HttpError(502,'Edge Function TikTok Shop chưa sẵn sàng')}
+   if(!fout||!fout.ok)throw new HttpError((fout&&fout.code)||fres.status||500,(fout&&fout.error)||'Thao tác TikTok Shop thất bại');
+   return fout;
+  }
+  throw new HttpError(404,'Route TikTok Shop không hợp lệ');
+ }
+
  if(parts[1]==='login'&&method==='POST'){
   var out=await rpc('cerish_login',{p_email:String((body&&body.email)||'').trim(),p_password:String((body&&body.password)||'')});
   setToken(out.token);sessionUser=out.user;

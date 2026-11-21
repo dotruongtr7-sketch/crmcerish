@@ -1,0 +1,3 @@
+# Chỉ cấu hình cho Edge Function TikTok Shop: tự kiểm tra phiên CRM nên tắt kiểm tra JWT của Supabase
+[functions.tiktok-shop]
+verify_jwt = false
